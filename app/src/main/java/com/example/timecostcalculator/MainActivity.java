@@ -2,6 +2,7 @@ package com.example.timecostcalculator;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -39,6 +40,35 @@ public class MainActivity extends AppCompatActivity {
     private double salary = 0;
     private boolean isMonthly = true;
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        // Botones inferiores
+        Button btnHome = findViewById(R.id.btnHome);
+        Button btnCalculate = findViewById(R.id.btnCalculate);
+        Button btnProfile = findViewById(R.id.btnProfile);
+
+        // Cargar Home por defecto
+        if (savedInstanceState == null) {
+            loadFragment(new HomeFragment());
+        }
+
+        // Click listeners
+        btnHome.setOnClickListener(v -> loadFragment(new HomeFragment()));
+        btnCalculate.setOnClickListener(v -> loadFragment(new CalculateFragment()));
+        btnProfile.setOnClickListener(v -> loadFragment(new ProfileFragment()));
+    }
+
+    private void loadFragment(Fragment fragment) {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, fragment)
+                .commit();
+    }
+}
+/*
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -256,3 +286,4 @@ public class MainActivity extends AppCompatActivity {
         return list;
     }
 }
+*/
