@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-
+<!--
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:padding="24dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- Contadores -->
     <androidx.cardview.widget.CardView
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
@@ -76,7 +75,6 @@
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
-    <!-- Input sueldo -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -97,7 +95,6 @@
             android:inputType="numberDecimal"/>
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- Selector tipo sueldo -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -122,7 +119,6 @@
             android:text="Por hora"/>
     </LinearLayout>
 
-    <!-- Botón para calcular -->
     <Button
         android:id="@+id/btnCalculate"
         android:layout_width="match_parent"
@@ -136,6 +132,53 @@
         android:layout_height="wrap_content"
         android:text="Ver productos guardados"/>
 
+</LinearLayout>
+-->
 
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:orientation="vertical"
+android:layout_width="match_parent"
+android:layout_height="match_parent">
+
+<!-- Contenedor para los fragments o layouts de cada pantalla -->
+<FrameLayout
+    android:id="@+id/fragment_container"
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1" />
+
+    <!-- Barra inferior con botones -->
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:background="#EEEEEE"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/btnHome"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="🏠"
+            android:textSize="20sp"/>
+
+        <Button
+            android:id="@+id/btnCalculate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="🧮"
+            android:textSize="20sp"/>
+
+        <Button
+            android:id="@+id/btnProfile"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="👤"
+            android:textSize="20sp"/>
+    </LinearLayout>
 
 </LinearLayout>

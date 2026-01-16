@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">TimeCostCalculator</string>
+    <string name="salary_title">💼 Tu sueldo</string>
+    <string name="salary_holder">Introduce tu salario (neto o bruto)</string>
+    <string name="hourly">Horario</string>
+    <string name="annual">Anual</string>
+    <string name="currency_title">💱 Moneda</string>
+    <string name="language_title">🌐 Idioma</string>
+    <string name="saved_money">💰 Dinero ahorrado</string>
+    <string name="saved_time">⏱ Tiempo ahorrado</string>
+    <string name="price">💰 Precio del producto</string>
+    <string name="price_holder">Introduce el precio</string>
+    <string name="result">Resultado</string>
+    <string name="calculate">Calcular</string>
+    <string name="submit">Submit</string>
+    <string name="buy">Comprar</string>
+    <string name="edit">Editar</string>
+    <string name="dont_buy">No comprar</string>
+    <string name="save">Guardar</string>
+    <string name="discard">Descartar</string>
+    <string name="work_time_basic">Necesitas trabajar: %1$dh %2$dm</string>
+    <string name="work_time_with_days">
+        Necesitas trabajar: %1$dh %2$dm\no %3$d días y %4$d horas
+    </string>
+
+    <string name="savings_goal">🎯 Límite de gasto máximo</string>
+    <string name="savings_goal_holder">Introduce tu límite de gasto</string>
+    <string name="remaining_money">💸 Dinero restante para gastar</string>
+
+
+    <!-- NUEVOS -->
+    <string name="product_name_hint">Nombre del producto</string>
+    <string name="product_link_hint">Link del producto (opcional)</string>
+    <string name="add_image">Añadir imagen</string>
+    <string name="edit_product_title">Editar producto</string>
+    <string name="save_product_title">Guardar producto</string>
+    <string name="delete_product_title">Eliminar producto</string>
+    <string name="delete_product_message">¿Seguro que quieres eliminar este producto?</string>
+    <string name="premium_limit_title">Límite alcanzado</string>
+    <string name="premium_limit_message">Solo puedes guardar hasta 3 productos en la versión gratuita.</string>
+    <string name="upgrade_premium">Actualizar a Premium</string>
+    <string name="cancel">Cancelar</string>
+    <string name="warning">¡Debes introducir un precio!</string>
+    <string name="saved_products">Productos guardados</string>
+    <string name="product_price">Precio:</string>
+    <string name="time">Tiempo:</string>
+
+    <string name="quick_info_title">Información rápida</string>
+    <string name="quick_info_text">
+TimeCostCalculator es una app para calcular cuánto tiempo necesitas trabajar para comprar un producto según tu salario.
+Puedes guardar hasta 3 productos en la versión gratuita.
+Opciones de cada producto: Comprar, Editar o No comprar (lo que se ahorra se suma a tu dinero y tiempo guardado).
+Puedes editar tu salario en Perfil para recalcular automáticamente los tiempos de los productos guardados.
+</string>
+    <string name="info_calculate_price">
+Introduce el precio del producto que quieres calcular. La app calculará cuánto tiempo necesitas trabajar según tu salario.</string>
+    <string name="info_calculate_price_buy">• <b>Botón "Comprar":</b> El tiempo calculado te ha parecido adecuado, por lo que has optado por comprar el producto. Esta decisión no influye en tus ahorros.</string>
+    <string name="info_calculate_price_dont_buy">• Botón "No comprar": Decides no comprar el producto, el dinero se guarda como ahorro y el tiempo se suma a tu tiempo ahorrado.</string>
+    <string name="info_calculate_price_save">• Botón "Guardar": Guarda el producto para revisarlo más tarde y decidir qué hacer con él. Puedes añadir nombre, imagen y link.</string>
+    <string name="info_calculate_price_discard">• Botón "Descartar": Cierra la ventana de resultados sin guardar ni modificar nada.</string>
+    <string name="info_limit">Al activar el modo de control de gastos, puedes indicar un límite máximo mensual de consumo de tu sueldo. Este modo no te impide gastar de más.</string>
+    <string name="info_limit_save">Esto supone ahorrar aproximadamente un %.1f%% de tu sueldo mensual</string>
+
+    <string name="info">Información</string>
+</resources>

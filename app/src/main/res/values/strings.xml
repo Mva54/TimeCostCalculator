@@ -1,3 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">TimeCostCalculator</string>
+    <string name="salary_title">💼 Your salary</string>
+    <string name="salary_holder">Indicate your salary (net or gross)</string>
+    <string name="hourly">Hourly</string>
+    <string name="annual">Annual</string>
+    <string name="currency_title">💱 Currency</string>
+    <string name="language_title">🌐 Language</string>
+    <string name="saved_money">💰 Money saved</string>
+    <string name="saved_time">⏱ Time saved</string>
+    <string name="price">💰 Product cost</string>
+    <string name="price_holder">Indicate the price</string>
+    <string name="result">Result</string>
+    <string name="calculate">Calculate</string>
+    <string name="submit">Submit</string>
+    <string name="buy">Buy</string>
+    <string name="edit">Edit</string>
+    <string name="dont_buy">Don\'t buy</string>
+    <string name="save">Save</string>
+    <string name="discard">Discard</string>
+    <string name="work_time_basic">You need to work: %1$dh %2$dm</string>
+    <string name="work_time_with_days">
+        You need to work: %1$dh %2$dm\nor %3$d days and %4$d hours
+    </string>
+
+    <string name="savings_goal">🎯 Spending limit</string>
+    <string name="savings_goal_holder">Enter your max limit</string>
+    <string name="remaining_money">💸 Dinero restante para gastar</string>
+
+
+    <!-- NUEVOS -->
+    <string name="product_name_hint">Product name</string>
+    <string name="product_link_hint">Product link (optional)</string>
+    <string name="add_image">Add image</string>
+    <string name="edit_product_title">Edit product</string>
+    <string name="save_product_title">Save product</string>
+    <string name="delete_product_title">Delete product</string>
+    <string name="delete_product_message">Are you sure you want to delete this product?</string>
+    <string name="premium_limit_title">Limit reached</string>
+    <string name="premium_limit_message">You can only save up to 3 products in the free version.</string>
+    <string name="upgrade_premium">Upgrade to Premium</string>
+    <string name="cancel">Cancel</string>
+    <string name="warning">¡You must indicate a price!</string>
+    <string name="saved_products">Saved products</string>
+    <string name="product_price">Price: </string>
+    <string name="time">Time: </string>
+
+    <string name="quick_info_title">Información rápida</string>
+    <string name="quick_info_text">
+TimeCostCalculator es una app para calcular cuánto tiempo necesitas trabajar para comprar un producto según tu salario.
+Puedes guardar hasta 3 productos en la versión gratuita.
+Opciones de cada producto: Comprar, Editar o No comprar (lo que se ahorra se suma a tu dinero y tiempo guardado).
+Puedes editar tu salario en Perfil para recalcular automáticamente los tiempos de los productos guardados.
+</string>
+    <string name="info_calculate_price">
+Enter the price of the product you want to calculate. The app will compute how much work time you need based on your salary.</string>
+    <string name="info_calculate_price_buy">• "Buy" button: This decision does not affect your savings.</string>
+    <string name="info_calculate_price_dont_buy">• "Don't Buy" button: Money and time are added to your savings.</string>
+    <string name="info_calculate_price_save">• "Save" button: Saves the product to review it later.</string>
+    <string name="info_calculate_price_discard">• "Discard" button: Closes the results window without saving or modifying anything.</string>
+    <string name="info_limit">By activating the expense control mode, you can set a maximum monthly spending limit on your salary. This mode does not prevent you from overspending.</string>
+    <string name="info_limit_save">This represents a saving of approximately %.1f%% of your monthly salary</string>
+    <string name="info">Information</string>
 </resources>
