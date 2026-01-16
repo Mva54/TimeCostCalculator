@@ -55,12 +55,31 @@ Puedes editar tu salario en Perfil para recalcular automáticamente los tiempos 
 </string>
     <string name="info_calculate_price">
 Introduce el precio del producto que quieres calcular. La app calculará cuánto tiempo necesitas trabajar según tu salario.</string>
-    <string name="info_calculate_price_buy">• <b>Botón "Comprar":</b> El tiempo calculado te ha parecido adecuado, por lo que has optado por comprar el producto. Esta decisión no influye en tus ahorros.</string>
+    <string name="info_calculate_price_buy">• Botón "Comprar": El tiempo calculado te ha parecido adecuado, por lo que has optado por comprar el producto. Esta decisión no influye en tus ahorros.</string>
     <string name="info_calculate_price_dont_buy">• Botón "No comprar": Decides no comprar el producto, el dinero se guarda como ahorro y el tiempo se suma a tu tiempo ahorrado.</string>
     <string name="info_calculate_price_save">• Botón "Guardar": Guarda el producto para revisarlo más tarde y decidir qué hacer con él. Puedes añadir nombre, imagen y link.</string>
     <string name="info_calculate_price_discard">• Botón "Descartar": Cierra la ventana de resultados sin guardar ni modificar nada.</string>
     <string name="info_limit">Al activar el modo de control de gastos, puedes indicar un límite máximo mensual de consumo de tu sueldo. Este modo no te impide gastar de más.</string>
     <string name="info_limit_save">Esto supone ahorrar aproximadamente un %.1f%% de tu sueldo mensual</string>
-
     <string name="info">Información</string>
+    <string name="premium_history_warning">Estás viendo solo el último mes</string>
+    <string name="premium_history_unlock">⭐ Desbloquea el historial mensual completo y hasta 6 meses en el gráfico con Premium</string>
+    <string name="month">Mes</string>
+    <string name="saved_money_card">Dinero ahorrado: </string>
+    <string name="saved_time_card">Tiempo ahorrado: </string>
+    <string name="monthly_saves">Ahorros mensuales: </string>
+    <string name="month_expenses">Dinero gastado: </string>
+    <string name="profile_premium">⭐ Productos ilimitados, historial completo y cero anuncios</string>
+    <string name="history_title">Resumen Mensual</string>
+    <string name="text_premium2">Solo puedes guardar hasta 3 productos en la versión gratuita.</string>
+    <string name="text_premium1">⭐ ¿Quieres guardar más productos? Pásate a Premium</string>
+    <string name="text_premium3">Obtén Premium para obtener guardados sin límite o mira un anuncio para obtener un guardado adicional. </string>
+    <string name="home_premium_warning">Tan solo tienes acceso a los últimos tres productos</string>
+    <string name="limit_reached">¡Límite alcanzado!</string>
+    <string name="update_premium">Actualizar a Premium</string>
+    <string name="watch_ad">Ver Anuncio</string>
+    <string name="no_ad">Anuncio no disponible ahora</string>
+    <string name="extra_slot">¡Has obtenido un guardado extra!</string>
+    <string name="history_tag">Dinero gastado</string>
+
 </resources>

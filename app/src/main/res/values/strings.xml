@@ -62,4 +62,24 @@ Enter the price of the product you want to calculate. The app will compute how m
     <string name="info_limit">By activating the expense control mode, you can set a maximum monthly spending limit on your salary. This mode does not prevent you from overspending.</string>
     <string name="info_limit_save">This represents a saving of approximately %.1f%% of your monthly salary</string>
     <string name="info">Information</string>
-</resources>
+    <string name="premium_history_unlock">⭐ Unlock full monthly history and up to 6 months in the chart with Premium</string>
+    <string name="history_title">Monthly Summary</string>
+    <string name="home_premium_warning">You only have access to the last three products</string>
+    <string name="text_premium1">⭐ Want to save more products? Go Premium</string>
+    <string name="premium_history_warning">You are viewing only the latest month</string>
+    <string name="month">Month</string>
+    <string name="saved_money_card">Money saved: </string>
+    <string name="saved_time_card">Time saved: </string>
+    <string name="monthly_saves">Monthly savings: </string>
+    <string name="month_expenses">Money spent: </string>
+    <string name="profile_premium">⭐ Unlimited products, full history, and no ads</string>
+    <string name="text_premium2">You can only save up to 3 products in the free version.</string>
+    <string name="text_premium3">Get Premium for unlimited saves or watch an ad to unlock one extra save.</string>
+    <string name="limit_reached">Limit reached!</string>
+    <string name="update_premium">Upgrade to Premium</string>
+    <string name="watch_ad">Watch Ad</string>
+    <string name="no_ad">Ad not available right now</string>
+    <string name="extra_slot">You\'ve unlocked an extra save!</string>
+    <string name="history_tag">Money spent</string>
+
+    </resources>

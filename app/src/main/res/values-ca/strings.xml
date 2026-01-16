@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">TimeCostCalculator</string>
+    <string name="salary_title">💼 El teu sou</string>
+    <string name="salary_holder">Introdueix el teu salari (net o brut)</string>
+    <string name="hourly">Horari</string>
+    <string name="annual">Anual</string>
+    <string name="currency_title">💱 Moneda</string>
+    <string name="language_title">🌐 Idioma</string>
+    <string name="saved_money">💰 Diners estalviats</string>
+    <string name="saved_time">⏱ Temps estalviat</string>
+    <string name="price">💰 Preu del producte</string>
+    <string name="price_holder">Introdueix el preu</string>
+    <string name="result">Resultat</string>
+    <string name="calculate">Calcular</string>
+    <string name="submit">Enviar</string>
+    <string name="buy">Comprar</string>
+    <string name="edit">Editar</string>
+    <string name="dont_buy">No comprar</string>
+    <string name="save">Guardar</string>
+    <string name="discard">Descartar</string>
+
+    <string name="work_time_basic">Necessites treballar: %1$dh %2$dm</string>
+    <string name="work_time_with_days">
+        Necessites treballar: %1$dh %2$dm\no %3$d dies i %4$d hores
+    </string>
+
+    <string name="savings_goal">🎯 Límit màxim de despesa</string>
+    <string name="savings_goal_holder">Introdueix el teu límit de despesa</string>
+    <string name="remaining_money">💸 Diners restants per gastar</string>
+
+    <!-- NOUS -->
+    <string name="product_name_hint">Nom del producte</string>
+    <string name="product_link_hint">Enllaç del producte (opcional)</string>
+    <string name="add_image">Afegir imatge</string>
+    <string name="edit_product_title">Editar producte</string>
+    <string name="save_product_title">Guardar producte</string>
+    <string name="delete_product_title">Eliminar producte</string>
+    <string name="delete_product_message">Segur que vols eliminar aquest producte?</string>
+
+    <string name="premium_limit_title">Límit assolit</string>
+    <string name="premium_limit_message">Només pots guardar fins a 3 productes a la versió gratuïta.</string>
+    <string name="upgrade_premium">Actualitzar a Premium</string>
+    <string name="cancel">Cancel·lar</string>
+    <string name="warning">Has d\'introduir un preu!</string>
+
+    <string name="saved_products">Productes guardats</string>
+    <string name="product_price">Preu:</string>
+    <string name="time">Temps:</string>
+
+    <string name="quick_info_title">Informació ràpida</string>
+    <string name="quick_info_text">
+TimeCostCalculator és una app per calcular quant temps necessites treballar per comprar un producte segons el teu sou.
+Pots guardar fins a 3 productes a la versió gratuïta.
+Opcions de cada producte: Comprar, Editar o No comprar (el que s\'estalvia se suma als teus diners i temps estalviats).
+Pots editar el teu salari a Perfil per recalcular automàticament els temps dels productes guardats.
+</string>
+
+    <string name="info_calculate_price">
+Introdueix el preu del producte que vols calcular. L\'app calcularà quant temps necessites treballar segons el teu sou.
+</string>
+
+    <string name="info_calculate_price_buy">• Botó "Comprar": El temps calculat t\'ha semblat adequat, així que has optat per comprar el producte. Aquesta decisió no influeix en els teus estalvis.</string>
+
+    <string name="info_calculate_price_dont_buy">• Botó "No comprar": Decideixes no comprar el producte, els diners es guarden com a estalvi i el temps se suma al teu temps estalviat.</string>
+
+    <string name="info_calculate_price_save">• Botó "Guardar": Guarda el producte per revisar-lo més endavant i decidir què fer-ne. Pots afegir nom, imatge i enllaç.</string>
+
+    <string name="info_calculate_price_discard">• Botó "Descartar": Tanca la finestra de resultats sense guardar ni modificar res.</string>
+
+    <string name="info_limit">En activar el mode de control de despeses, pots indicar un límit màxim mensual de consum del teu sou. Aquest mode no t\'impedeix gastar més.</string>
+
+    <string name="info_limit_save">Això suposa estalviar aproximadament un %1$.1f%% del teu sou mensual</string>
+
+    <string name="info">Informació</string>
+
+    <string name="premium_history_warning">Estàs veient només l\'últim mes</string>
+    <string name="premium_history_unlock">⭐ Desbloqueja l\'historial mensual complet i fins a 6 mesos al gràfic amb Premium</string>
+
+    <string name="month">Mes</string>
+    <string name="saved_money_card">Diners estalviats: </string>
+    <string name="saved_time_card">Temps estalviat: </string>
+    <string name="monthly_saves">Estalvis mensuals: </string>
+    <string name="month_expenses">Diners gastats: </string>
+
+    <string name="profile_premium">⭐ Productes il·limitats, historial complet i zero anuncis</string>
+    <string name="history_title">Resum Mensual</string>
+
+    <string name="text_premium2">Només pots guardar fins a 3 productes a la versió gratuïta.</string>
+    <string name="text_premium1">⭐ Vols guardar més productes? Passa\'t a Premium</string>
+    <string name="text_premium3">Obtén Premium per tenir guardats il·limitats o mira un anunci per obtenir un guardat addicional.</string>
+
+    <string name="home_premium_warning">Només tens accés als últims tres productes</string>
+
+    <string name="limit_reached">Límit assolit!</string>
+    <string name="update_premium">Actualitzar a Premium</string>
+    <string name="watch_ad">Veure anunci</string>
+    <string name="no_ad">Anunci no disponible ara</string>
+    <string name="extra_slot">Has obtingut un guardat extra!</string>
+
+    <string name="history_tag">Diners gastats</string>
+</resources>
