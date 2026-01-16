@@ -44,4 +44,7 @@ dependencies {
     implementation("com.google.code.gson:gson:2.13.2")
     implementation("com.github.bumptech.glide:glide:4.15.1")
     annotationProcessor("com.github.bumptech.glide:compiler:4.15.1")
+    implementation(libs.mpandroidchart)
+    implementation("com.google.android.gms:play-services-ads:22.6.0")
+    implementation("com.android.billingclient:billing-ktx:6.0.1")
 }

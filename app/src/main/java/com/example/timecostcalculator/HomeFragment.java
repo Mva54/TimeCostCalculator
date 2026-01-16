@@ -63,6 +63,20 @@ public class HomeFragment extends Fragment {
         tvSavedMoney = view.findViewById(R.id.tvSavedMoney);
         tvSavedTime = view.findViewById(R.id.tvSavedTime);
         productsContainer = view.findViewById(R.id.productsContainer);
+        View premiumCard = view.findViewById(R.id.cardPremiumPromo);
+        View btnGoPremium = view.findViewById(R.id.btnGoPremium);
+        View tvPremiumOnlyOne = view.findViewById(R.id.tvPremium);
+
+        boolean isPremium = SharedPrefManager.isPremium(requireContext());
+
+        if (!isPremium) {
+            premiumCard.setVisibility(View.VISIBLE);
+            tvPremiumOnlyOne.setVisibility(View.VISIBLE);
+
+            btnGoPremium.setOnClickListener(v -> {
+                MainActivity.billingManager.launchPremiumPurchase();
+            });
+        }
 
         tvRemainingMoney = view.findViewById(R.id.tvRemainingMoney);
         cardRemainingMoney = view.findViewById(R.id.cardRemainingMoney);
@@ -132,7 +146,7 @@ public class HomeFragment extends Fragment {
     private void loadSavedProducts() {
         productsContainer.removeAllViews();
 
-        List<String> products = SharedPrefManager.getSavedProducts(requireContext());
+        List<String> products = SharedPrefManager.getVisibleSavedProducts(requireContext());
 
         for (String raw : products) {
             String[] parts = raw.split("\\|");
@@ -213,6 +227,7 @@ public class HomeFragment extends Fragment {
         SharedPrefManager.setCurrentSpending(getContext(), price);
         loadSavedProducts();
         updateRemainingMoneyCard();
+        checkAndDecrementProductSlots();
     }
 
 
@@ -221,6 +236,7 @@ public class HomeFragment extends Fragment {
         SharedPrefManager.addSavedTime(requireContext(), minutes);
 
         SharedPrefManager.removeProduct(requireContext(), raw);
+        checkAndDecrementProductSlots();
 
         loadSavedProducts();
         loadData();
@@ -310,6 +326,15 @@ public class HomeFragment extends Fragment {
                 })
                 .setNegativeButton("Cancelar", null)
                 .show();
+    }
+
+    void checkAndDecrementProductSlots()
+    {
+        if (!SharedPrefManager.isPremium(requireContext()) &&
+                SharedPrefManager.getMaxProductSlots(requireContext()) > 0)
+        {
+            SharedPrefManager.decrementProdcutSlots(requireContext());
+        }
     }
 
 /*
