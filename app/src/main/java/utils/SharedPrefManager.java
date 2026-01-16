@@ -8,9 +8,14 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SharedPrefManager {
+
+    private static final String KEY_IS_PREMIUM = "is_premium";
 
     private static final String PREFS_PROFILE = "user_profile";
     private static final String PREFS_NAME = "prefs";
@@ -32,12 +37,32 @@ public class SharedPrefManager {
     private static final String KEY_MAX_SPENDING = "max_spending";
     private static final String KEY_CURRENT_SPENDING = "current_spending";
 
+    private static final String KEY_AD_UNLOCKED_SLOTS = "ad_unlocked_slots";
+
     private static Gson gson = new Gson();
 
     private static SharedPreferences getPrefs(Context ctx) {
         return ctx.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
     }
 
+    // ------------------- Anuncios --------------------//
+    public static int getMaxProductSlots(Context ctx) {
+        if (isPremium(ctx)) return Integer.MAX_VALUE;
+
+        return getPrefs(ctx).getInt(KEY_AD_UNLOCKED_SLOTS, 0);
+    }
+
+    public static void incrementProdcutSlots(Context ctx) {
+        getPrefs(ctx).edit()
+                .putInt(KEY_AD_UNLOCKED_SLOTS, getMaxProductSlots(ctx) + 1)
+                .apply();
+    }
+
+    public static void decrementProdcutSlots(Context ctx) {
+        getPrefs(ctx).edit()
+                .putInt(KEY_AD_UNLOCKED_SLOTS, getMaxProductSlots(ctx) - 1)
+                .apply();
+    }
 
     // ------------------- Ahorro --------------------//
     public static void setSpendingMode(Context ctx, boolean enabled) {
@@ -72,6 +97,13 @@ public class SharedPrefManager {
         return Double.longBitsToDouble(
                 getPrefs(ctx).getLong(KEY_CURRENT_SPENDING, Double.doubleToLongBits(0))
         );
+    }
+
+    public static void changeCurrentSpending(Context ctx, double amount)
+    {
+        getPrefs(ctx).edit()
+                .putLong(KEY_CURRENT_SPENDING, Double.doubleToLongBits( amount))
+                .apply();
     }
 
     public static double getRemainingSpending(Context ctx) {
@@ -124,20 +156,40 @@ public class SharedPrefManager {
         String json = getPrefs(ctx).getString(KEY_SAVED_PRODUCTS, "[]");
         Type type = new TypeToken<List<String>>() {}.getType();
         List<String> list = gson.fromJson(json, type);
-        if (list == null) return new ArrayList<>();
-        return list;
+        return list != null ? list : new ArrayList<>();
     }
+
+    public static List<String> getVisibleSavedProducts(Context ctx) {
+        List<String> all = getSavedProducts(ctx);
+
+        if (isPremium(ctx)) {
+            return all;
+        }
+
+        int limit = Math.min(3 + getMaxProductSlots(ctx), all.size());
+        return new ArrayList<>(all.subList(0, limit));
+    }
+
 
     private static void saveProductList(Context ctx, List<String> list) {
         String json = gson.toJson(list);
         getPrefs(ctx).edit().putString(KEY_SAVED_PRODUCTS, json).apply();
     }
 
-    public static boolean addSavedProduct(Context ctx, String name, double price, long minutes, String imageUri, String link) {
-        List<String> list = getSavedProducts(ctx);
-        if (list.size() >= 3) return false;
+    public static boolean addSavedProduct(Context ctx,
+                                          String name,
+                                          double price,
+                                          long minutes,
+                                          String imageUri,
+                                          String link) {
 
-        System.out.println("IMAGE URI SAVED: " + imageUri);
+        List<String> list = getSavedProducts(ctx);
+
+        // Límite SOLO para usuarios gratuitos
+        if (!isPremium(ctx) && list.size() >= 3 + getMaxProductSlots(ctx)) {
+            return false;
+        }
+
         String product = name + "|" + price + "|" + minutes + "|" + imageUri + "|" + link;
         list.add(product);
         saveProductList(ctx, list);
@@ -204,6 +256,11 @@ public class SharedPrefManager {
 
     // ------------------- Money y Time -------------------
 
+    public static void setSavedMoney(Context ctx, double newSavedMoney) {
+        SharedPreferences prefs = getPrefs(ctx);
+        prefs.edit().putLong(KEY_SAVED_MONEY, Double.doubleToLongBits(newSavedMoney)).apply();
+    }
+
     public static void addSavedMoney(Context ctx, double moneyToAdd) {
         SharedPreferences prefs = getPrefs(ctx);
         double currentMoney = Double.longBitsToDouble(prefs.getLong(KEY_SAVED_MONEY, Double.doubleToLongBits(0)));
@@ -214,6 +271,11 @@ public class SharedPrefManager {
     public static double getSavedMoney(Context ctx) {
         SharedPreferences prefs = getPrefs(ctx);
         return Double.longBitsToDouble(prefs.getLong(KEY_SAVED_MONEY, Double.doubleToLongBits(0)));
+    }
+
+    public static void setSavedTime(Context ctx, long newSavedTime) {
+        SharedPreferences prefs = getPrefs(ctx);
+        prefs.edit().putLong(KEY_SAVED_TIME, newSavedTime).apply();
     }
 
     public static void addSavedTime(Context ctx, long minutesToAdd) {
@@ -280,4 +342,76 @@ public class SharedPrefManager {
         String[] codes = {"es", "en", "fr", "de"};
         return (pos >= 0 && pos < codes.length) ? codes[pos] : "es";
     }
+
+    public static void saveMonthStats(Context ctx, String monthKey, double savedMoney, long savedTime, double monthlySavings, List<String> products) {
+        SharedPreferences prefs = getPrefs(ctx);
+        String json = prefs.getString("monthly_history", "{}");
+
+        Gson gson = new Gson();
+        Type type = new TypeToken<Map<String, Object>>() {}.getType();
+        Map<String, Object> history = gson.fromJson(json, type);
+        if (history == null) history = new HashMap<>();
+
+        Map<String, Object> monthData = new HashMap<>();
+        monthData.put("savedMoney", savedMoney);
+        monthData.put("savedTime", savedTime);
+        monthData.put("monthlySavings", monthlySavings);
+        monthData.put("products", products);
+
+        history.put(monthKey, monthData);
+
+        prefs.edit().putString("monthly_history", gson.toJson(history)).apply();
+    }
+
+    public static Map<String, Object> getMonthStats(Context ctx, String monthKey) {
+        SharedPreferences prefs = getPrefs(ctx);
+        String json = prefs.getString("monthly_history", "{}");
+
+        Gson gson = new Gson();
+        Type type = new TypeToken<Map<String, Map<String, Object>>>() {}.getType();
+        Map<String, Map<String, Object>> history = gson.fromJson(json, type);
+
+        if (history != null && history.containsKey(monthKey)) {
+            return history.get(monthKey);
+        }
+        return null;
+    }
+
+    public static Map<String, Map<String, Object>> getHistory(Context ctx, boolean isPremium) {
+        SharedPreferences prefs = getPrefs(ctx);
+        String json = prefs.getString("monthly_history", "{}");
+
+        Gson gson = new Gson();
+        Type type = new TypeToken<Map<String, Map<String, Object>>>() {}.getType();
+        Map<String, Map<String, Object>> history = gson.fromJson(json, type);
+        if (history == null) history = new HashMap<>();
+
+        if (!isPremium) {
+            // limitar solo a mes actual + anterior
+            Calendar today = Calendar.getInstance();
+            String currentMonth = String.format("%04d-%02d", today.get(Calendar.YEAR), today.get(Calendar.MONTH)+1);
+            today.add(Calendar.MONTH, -1);
+            String previousMonth = String.format("%04d-%02d", today.get(Calendar.YEAR), today.get(Calendar.MONTH)+1);
+
+            Map<String, Map<String, Object>> limited = new HashMap<>();
+            if (history.containsKey(currentMonth)) limited.put(currentMonth, history.get(currentMonth));
+            if (history.containsKey(previousMonth)) limited.put(previousMonth, history.get(previousMonth));
+            return limited;
+        }
+
+        return history;
+    }
+
+    public static boolean isPremium(Context ctx) {
+        return ctx.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+                .getBoolean(KEY_IS_PREMIUM, false);
+    }
+
+    public static void setPremium(Context ctx, boolean value) {
+        ctx.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+                .edit()
+                .putBoolean(KEY_IS_PREMIUM, value)
+                .apply();
+    }
 }
+

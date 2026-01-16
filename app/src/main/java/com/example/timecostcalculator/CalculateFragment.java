@@ -18,6 +18,7 @@ import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.PickVisualMediaRequest;
@@ -25,6 +26,14 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
+import com.google.android.gms.ads.AdError;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.FullScreenContentCallback;
+import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.rewarded.RewardedAd;
+import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -41,6 +50,11 @@ public class CalculateFragment extends Fragment {
     private ActivityResultLauncher<Intent> imagePickerLauncher;
     private ImageView imagePreview;
 
+    private RewardedAd rewardedAd;
+    private boolean rewardGranted = false;
+
+    private static String auxProduct = "";
+
     public CalculateFragment() { }
 
     @Nullable
@@ -54,6 +68,20 @@ public class CalculateFragment extends Fragment {
         etProductPrice = view.findViewById(R.id.etProductPrice);
         tvError = view.findViewById(R.id.tvError);
         btnSubmitPrice = view.findViewById(R.id.btnSubmitPrice);
+
+        AdView adView = view.findViewById(R.id.adView);
+        AdView adView2 = view.findViewById(R.id.adView2);
+
+        if (!SharedPrefManager.isPremium(getContext())) {
+            AdRequest adRequest = new AdRequest.Builder().build();
+            adView.loadAd(adRequest);
+            adView2.loadAd(adRequest);
+        }
+
+        if (SharedPrefManager.isPremium(getContext())) {
+            adView.setVisibility(View.GONE);
+            adView2.setVisibility(View.GONE);
+        }
 
         btnSubmitPrice.setOnClickListener(v -> submitPrice());
 
@@ -307,19 +335,38 @@ public class CalculateFragment extends Fragment {
         //saveResult(price, hours, minutes);
 
         if (!saved) {
+            auxProduct = name + "|" + price + "|" + hours + "|" + minutes + "|" + imageUri + "|" + link;
             showPremiumDialog();
         }
     }
 
     private void showPremiumDialog() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(getString(R.string.text_premium2)).append("\n\n").
+                append(getString(R.string.text_premium3));
         new AlertDialog.Builder(getContext())
-                .setTitle("Límite alcanzado")
-                .setMessage("Solo puedes guardar hasta 3 productos en la versión gratuita.")
-                .setPositiveButton("Actualizar a Premium", (d, w) -> {
+                .setTitle(getString(R.string.limit_reached))
+                .setMessage(stringBuilder)
+                .setPositiveButton(getString(R.string.update_premium), (d, w) -> {
                     // futuro: abrir pantalla de pago
                 })
-                .setNegativeButton("Cancelar", null)
+                .setNegativeButton(getString(R.string.watch_ad), (d, w) -> {
+                    showRewardedAd();
+                })
+                .setCancelable(true)
                 .show();
+    }
+
+    public void unlockOneSlot(Context ctx) {
+        SharedPrefManager.incrementProdcutSlots(ctx);
+        String[] parts = auxProduct.split("\\|");
+
+        saveResultProduct(parts[0], Double.parseDouble(parts[1]), Integer.parseInt(parts[2]),
+                Integer.parseInt(parts[3]),
+                parts.length > 4 ? parts[4] : "",
+                parts.length > 5 ? parts[5] : "");
+
+        auxProduct = "";
     }
 
     private String copyImageToInternalStorage(Uri uri) {
@@ -349,6 +396,42 @@ public class CalculateFragment extends Fragment {
             return "";
         }
     }
+
+
+    private void showRewardedAd() {
+        if (AdManager.getRewaredAd() == null) {
+            Toast.makeText(getContext(), getString(R.string.no_ad), Toast.LENGTH_SHORT).show();
+            AdManager.loadRewarded(getContext()); // intenta recargar
+            return;
+        }
+
+        AdManager.getRewaredAd().setFullScreenContentCallback(new FullScreenContentCallback() {
+            @Override
+            public void onAdDismissedFullScreenContent() {
+                AdManager.setRewardedAd(null);
+                AdManager.loadRewarded(getContext()); // precargar siguiente
+            }
+
+            @Override
+            public void onAdFailedToShowFullScreenContent(@NonNull AdError adError) {
+                AdManager.setRewardedAd(null);
+            }
+        });
+
+        AdManager.getRewaredAd().show(requireActivity(), rewardItem -> {
+            // 🎁 RECOMPENSA
+            unlockOneSlot(requireContext());
+            rewardGranted = true;
+
+            Toast.makeText(
+                    getContext(),
+                    getString(R.string.extra_slot),
+                    Toast.LENGTH_LONG
+            ).show();
+        });
+    }
+
+
 
 
 }

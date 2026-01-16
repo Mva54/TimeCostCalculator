@@ -23,6 +23,7 @@ import androidx.appcompat.widget.SwitchCompat;
 import androidx.fragment.app.Fragment;
 
 import java.util.Locale;
+import java.util.Objects;
 
 import utils.SharedPrefManager;
 
@@ -35,6 +36,9 @@ public class ProfileFragment extends Fragment {
     private SwitchCompat switchLimitMode;
     private EditText etLimitGoal;
     private TextView tvLimitInfo;
+    private LinearLayout premiumLayout;
+
+    private Button btnSubmitPremium;
 
 
     public ProfileFragment() { }
@@ -52,6 +56,9 @@ public class ProfileFragment extends Fragment {
         switchLimitMode = view.findViewById(R.id.switchLimitMode);
         etLimitGoal = view.findViewById(R.id.etLimitGoal);
         tvLimitInfo = view.findViewById(R.id.tvLimitInfo);
+        btnSubmitPremium = view.findViewById(R.id.btnSubmitPremium);
+        premiumLayout = view.findViewById(R.id.cardPremiumPromo);
+
 
         // Monedas
         String[] currencies = {"€", "$", "£", "¥"};
@@ -81,7 +88,7 @@ public class ProfileFragment extends Fragment {
         Spinner spLanguage = view.findViewById(R.id.spLanguage);
 
         // Opciones visibles para el usuario
-        String[] languages = {"Español", "English"};
+        String[] languages = {"Español", "English", "Català"};
         spLanguage.setAdapter(new ArrayAdapter<>(getContext(),
                 android.R.layout.simple_spinner_dropdown_item, languages));
 
@@ -93,10 +100,12 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onItemSelected(android.widget.AdapterView<?> parent, View view, int position, long id) {
                 int savedLang = SharedPrefManager.getLanguage(getContext());
+                System.out.println("savedLang: " + savedLang);
+                System.out.println("savedLang2: " + position );
                 if (position != savedLang) {
                     SharedPrefManager.saveLanguage(getContext(), position);
                     ProfileFragment.updateLocale(getContext());
-                    getActivity().recreate();
+                    requireActivity().recreate();
                 }
             }
 
@@ -131,20 +140,44 @@ public class ProfileFragment extends Fragment {
                     .show();
         });
 
+        btnSubmitPremium.setOnClickListener(v -> {SharedPrefManager.setPremium(getContext(),
+                !SharedPrefManager.isPremium((getContext())));});
+
+        if (SharedPrefManager.isPremium(requireContext())) {
+            premiumLayout.setVisibility(View.GONE);
+        }
+
         return view;
     }
 
     private void saveProfile() {
-        String salary = etSalary.getText().toString();
-        boolean isAnnual = switchSalaryType.isChecked(); // true = Anual, false = Horario
+        String salaryStr = etSalary.getText().toString().trim();
+
+        // ❌ No hay sueldo → no recalculamos nada
+        if (salaryStr.isEmpty()) {
+            SharedPrefManager.saveSalary(getContext(), "");
+            return;
+        }
+
+        double salary;
+        try {
+            salary = Double.parseDouble(salaryStr);
+        } catch (NumberFormatException e) {
+            return;
+        }
+
+        if (salary <= 0) return;
+
+        boolean isAnnual = switchSalaryType.isChecked();
         int currency = spCurrency.getSelectedItemPosition();
 
-        SharedPrefManager.saveSalary(getContext(), salary);
+        SharedPrefManager.saveSalary(getContext(), salaryStr);
         SharedPrefManager.saveSalaryType(getContext(), isAnnual);
         SharedPrefManager.saveCurrency(getContext(), currency);
 
-        SharedPrefManager.recalcProductTimes(getContext(), Double.parseDouble(salary), isAnnual);
+        SharedPrefManager.recalcProductTimes(getContext(), salary, isAnnual);
     }
+
 
     private void loadProfile() {
         etSalary.setText(SharedPrefManager.getSalary(getContext()));
@@ -161,15 +194,16 @@ public class ProfileFragment extends Fragment {
     public static void updateLocale(Context context) {
         // Recupera el idioma seleccionado (por ejemplo: 0=Español, 1=Inglés, etc.)
         int langIndex = SharedPrefManager.getLanguage(context);
+        System.out.println("langIndex: " + langIndex);
 
         // Mapear índice a código de idioma
         String langCode;
         switch (langIndex) {
             case 1: langCode = "en"; break;
-            case 2: langCode = "fr"; break;
-            case 3: langCode = "de"; break;
+            case 2: langCode = "ca"; break;
             default: langCode = "es"; break; // español por defecto
         }
+        System.out.println("langCode: " + langCode);
 
         Locale locale = new Locale(langCode);
         Locale.setDefault(locale);

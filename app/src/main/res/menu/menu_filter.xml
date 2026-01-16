@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/filter_most_spent"
+        android:title="Más gasto"/>
+    <item
+        android:id="@+id/filter_least_spent"
+        android:title="Menos gasto"/>
+    <item
+        android:id="@+id/filter_newest"
+        android:title="Más reciente"/>
+    <item
+        android:id="@+id/filter_oldest"
+        android:title="Más antiguo"/>
+</menu>
