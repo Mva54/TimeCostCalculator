@@ -31,16 +31,6 @@ public class MainActivity extends BaseActivity {
         super.attachBaseContext(newBase);
     }
 
-
-    public static BillingManager billingManager;
-
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        ProfileFragment.updateLocale(newBase);
-        super.attachBaseContext(newBase);
-    }
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
