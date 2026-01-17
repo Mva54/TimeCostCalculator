@@ -585,9 +585,4 @@ public class CalculateFragment extends Fragment {
             return null;
         }
     }
-
-
-
-
-
 }

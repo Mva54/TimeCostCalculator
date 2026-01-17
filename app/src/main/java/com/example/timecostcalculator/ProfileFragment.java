@@ -39,6 +39,9 @@ public class ProfileFragment extends Fragment {
     private SwitchCompat switchLimitMode;
     private EditText etLimitGoal;
     private TextView tvLimitInfo;
+    private LinearLayout premiumLayout;
+
+    private Button btnSubmitPremium;
 
 
     public ProfileFragment() { }
@@ -122,6 +125,8 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onItemSelected(android.widget.AdapterView<?> parent, View view, int position, long id) {
                 int savedLang = SharedPrefManager.getLanguage(getContext());
+                System.out.println("savedLang: " + savedLang);
+                System.out.println("savedLang2: " + position );
                 if (position != savedLang) {
                     SharedPrefManager.saveLanguage(getContext(), position);
                     requireActivity().recreate();
