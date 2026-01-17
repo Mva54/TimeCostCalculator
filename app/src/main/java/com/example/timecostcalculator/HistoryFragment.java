@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -25,15 +24,12 @@ import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import org.json.JSONObject;
-
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -179,7 +175,7 @@ public class HistoryFragment extends Fragment {
 
         // Configuramos DataSet y Chart
         BarDataSet spentSet = new BarDataSet(spentEntries, getString(R.string.history_tag));
-        spentSet.setColor(Color.parseColor("#F44336"));
+        spentSet.setColor(Color.parseColor("#f55347"));
 
         BarData data = new BarData(spentSet);
         data.setBarWidth(0.5f);
@@ -253,16 +249,17 @@ public class HistoryFragment extends Fragment {
         TextView tvSpending = card.findViewById(R.id.tvSpending);
 
         tvMonth.setText(monthKey);
-        tvMoney.setText(getString(R.string.saved_money_card) + String.format("%.2f %s", savedMoney,
+        tvMoney.setText(getString(R.string.saved_money_card) + " " + String.format("%.2f %s", savedMoney,
                 SharedPrefManager.getCurrencySymbol(requireContext())));
         long hours = savedTime / 60;
         long minutes = savedTime % 60;
-        tvTime.setText(getString(R.string.saved_time_card)  + hours + "h " + minutes + "m");
-        tvSavings.setText(getString(R.string.monthly_saves) + String.format("%.2f %s", monthlySavings,
+        tvTime.setText(getString(R.string.saved_time_card) + " "  + hours + "h " + minutes + "m");
+        tvSavings.setText(getString(R.string.monthly_saves) + " " + String.format("%.2f %s", monthlySavings,
                 SharedPrefManager.getCurrencySymbol(requireContext())));
-        tvSpending.setText(getString(R.string.month_expenses)  + String.format("%.2f / %.2f %s", currentSpending, maxSpending,
+        tvSpending.setText(getString(R.string.month_expenses) + " "  + String.format("%.2f / %.2f %s", currentSpending, maxSpending,
                 SharedPrefManager.getCurrencySymbol(requireContext())));
 
         historyContainer.addView(card);
     }
+
 }

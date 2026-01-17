@@ -22,6 +22,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+
 import java.util.Locale;
 import java.util.Objects;
 
@@ -29,7 +32,7 @@ import utils.SharedPrefManager;
 
 public class ProfileFragment extends Fragment {
 
-    private EditText etSalary;
+    private EditText etSalary, etMonthlyHours;
     private SwitchCompat switchSalaryType;
     private Spinner spCurrency;
 
@@ -51,17 +54,27 @@ public class ProfileFragment extends Fragment {
         View view = inflater.inflate(R.layout.profile_fragment, container, false);
 
         etSalary = view.findViewById(R.id.etSalary);
+        etMonthlyHours = view.findViewById(R.id.etMonthlyHours);
         switchSalaryType = view.findViewById(R.id.switchSalaryType);
         spCurrency = view.findViewById(R.id.spCurrency);
         switchLimitMode = view.findViewById(R.id.switchLimitMode);
         etLimitGoal = view.findViewById(R.id.etLimitGoal);
         tvLimitInfo = view.findViewById(R.id.tvLimitInfo);
-        btnSubmitPremium = view.findViewById(R.id.btnSubmitPremium);
-        premiumLayout = view.findViewById(R.id.cardPremiumPromo);
+        Button btnSubmitPremium = view.findViewById(R.id.btnSubmitPremium);
+        LinearLayout premiumLayout = view.findViewById(R.id.cardPremiumPromo);
+
+        AdView adView = view.findViewById(R.id.adView);
+
+        if (!SharedPrefManager.isPremium(getContext())) {
+            AdRequest adRequest = new AdRequest.Builder().build();
+            adView.loadAd(adRequest);
+        } else {
+            adView.setVisibility(View.GONE);
+        }
 
 
         // Monedas
-        String[] currencies = {"€", "$", "£", "¥"};
+        String[] currencies = {"€", "$", "£ ", "Fr.", "¥", };
         spCurrency.setAdapter(new ArrayAdapter<>(getContext(),
                 android.R.layout.simple_spinner_dropdown_item, currencies));
 
@@ -70,6 +83,18 @@ public class ProfileFragment extends Fragment {
 
         // Listener del Switch
         switchSalaryType.setOnCheckedChangeListener((buttonView, isChecked) -> saveProfile());
+
+        /*
+        switchSalaryType.setOnCheckedChangeListener((buttonView, isAnnual) -> {
+            if (isAnnual) {
+                etMonthlyHours.setVisibility(View.GONE);
+            } else {
+                etMonthlyHours.setVisibility(View.VISIBLE);
+                etMonthlyHours.setText(SharedPrefManager.getMonthlyHours(getContext()));
+            }
+            saveProfile();
+        });
+         */
 
         // Listener del Spinner de moneda
         spCurrency.setOnItemSelectedListener(new android.widget.AdapterView.OnItemSelectedListener() {
@@ -104,7 +129,6 @@ public class ProfileFragment extends Fragment {
                 System.out.println("savedLang2: " + position );
                 if (position != savedLang) {
                     SharedPrefManager.saveLanguage(getContext(), position);
-                    ProfileFragment.updateLocale(getContext());
                     requireActivity().recreate();
                 }
             }
@@ -140,6 +164,18 @@ public class ProfileFragment extends Fragment {
                     .show();
         });
 
+        ImageView btnSalaryInfo = view.findViewById(R.id.btnSalaryInfo);
+        btnSalaryInfo.setOnClickListener(v -> {
+            new AlertDialog.Builder(requireContext())
+                    .setTitle(getString(R.string.info))
+                    .setMessage(new StringBuilder(getString(R.string.info_salary) + "\n")
+                            .append(getString(R.string.info_salary2)).append("\n\n")
+                            .append(getString(R.string.info_salary3)))
+                    .setPositiveButton("OK", null)
+                    .show();
+        });
+
+
         btnSubmitPremium.setOnClickListener(v -> {SharedPrefManager.setPremium(getContext(),
                 !SharedPrefManager.isPremium((getContext())));});
 
@@ -152,6 +188,7 @@ public class ProfileFragment extends Fragment {
 
     private void saveProfile() {
         String salaryStr = etSalary.getText().toString().trim();
+        String monthlyHours = etMonthlyHours.getText().toString().trim();
 
         // ❌ No hay sueldo → no recalculamos nada
         if (salaryStr.isEmpty()) {
@@ -172,8 +209,10 @@ public class ProfileFragment extends Fragment {
         int currency = spCurrency.getSelectedItemPosition();
 
         SharedPrefManager.saveSalary(getContext(), salaryStr);
+        SharedPrefManager.saveMonthlyHours(getContext(), monthlyHours);
         SharedPrefManager.saveSalaryType(getContext(), isAnnual);
         SharedPrefManager.saveCurrency(getContext(), currency);
+        SharedPrefManager.setSavingsMode(getContext(), switchLimitMode.isChecked());
 
         SharedPrefManager.recalcProductTimes(getContext(), salary, isAnnual);
     }
@@ -181,6 +220,14 @@ public class ProfileFragment extends Fragment {
 
     private void loadProfile() {
         etSalary.setText(SharedPrefManager.getSalary(getContext()));
+        /*
+        if (SharedPrefManager.getSalaryType(getContext())) {
+            etMonthlyHours.setVisibility(View.GONE);
+        } else {
+            etMonthlyHours.setVisibility(View.VISIBLE);
+            etMonthlyHours.setText(SharedPrefManager.getMonthlyHours(getContext()));
+        }
+        */
         switchSalaryType.setChecked(SharedPrefManager.getSalaryType(getContext()));
         spCurrency.setSelection(SharedPrefManager.getCurrency(getContext()));
         System.out.println("MAX SPENDING: " + SharedPrefManager.getMaxSpending(getContext()));
@@ -189,29 +236,6 @@ public class ProfileFragment extends Fragment {
                 SharedPrefManager.isSpendingModeEnabled(getContext())
         );
         updateLimitInfoText();
-    }
-
-    public static void updateLocale(Context context) {
-        // Recupera el idioma seleccionado (por ejemplo: 0=Español, 1=Inglés, etc.)
-        int langIndex = SharedPrefManager.getLanguage(context);
-        System.out.println("langIndex: " + langIndex);
-
-        // Mapear índice a código de idioma
-        String langCode;
-        switch (langIndex) {
-            case 1: langCode = "en"; break;
-            case 2: langCode = "ca"; break;
-            default: langCode = "es"; break; // español por defecto
-        }
-        System.out.println("langCode: " + langCode);
-
-        Locale locale = new Locale(langCode);
-        Locale.setDefault(locale);
-
-        Resources res = context.getResources();
-        Configuration config = res.getConfiguration();
-        config.setLocale(locale);
-        res.updateConfiguration(config, res.getDisplayMetrics());
     }
 
     private void updateLimitInfoText() {

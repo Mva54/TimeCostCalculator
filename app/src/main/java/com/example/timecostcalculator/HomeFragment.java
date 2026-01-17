@@ -1,13 +1,16 @@
 package com.example.timecostcalculator;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.InputFilter;
+import android.text.InputType;
 import android.view.Gravity;
-import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +28,13 @@ import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.List;
+import java.io.InputStream;
 
 import utils.SharedPrefManager;
 
@@ -45,7 +54,7 @@ public class HomeFragment extends Fragment {
     private static final String KEY_SAVED_TIME = "saved_time";
 
     public HomeFragment() {
-        // Constructor vacío requerido
+
     }
 
     @Nullable
@@ -53,8 +62,6 @@ public class HomeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-
-        //requireContext().getSharedPreferences("prefs", Context.MODE_PRIVATE).edit().clear().apply();
 
         // Inflar el layout
         View view = inflater.inflate(R.layout.home_fragment, container, false);
@@ -67,15 +74,22 @@ public class HomeFragment extends Fragment {
         View btnGoPremium = view.findViewById(R.id.btnGoPremium);
         View tvPremiumOnlyOne = view.findViewById(R.id.tvPremium);
 
+        AdView adView = view.findViewById(R.id.adView);
+
         boolean isPremium = SharedPrefManager.isPremium(requireContext());
 
         if (!isPremium) {
             premiumCard.setVisibility(View.VISIBLE);
             tvPremiumOnlyOne.setVisibility(View.VISIBLE);
 
+            AdRequest adRequest = new AdRequest.Builder().build();
+            adView.loadAd(adRequest);
+
             btnGoPremium.setOnClickListener(v -> {
                 MainActivity.billingManager.launchPremiumPurchase();
             });
+        } else {
+            adView.setVisibility(View.GONE);
         }
 
         tvRemainingMoney = view.findViewById(R.id.tvRemainingMoney);
@@ -84,16 +98,15 @@ public class HomeFragment extends Fragment {
         imagePickerLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
-                    if (result.getResultCode() == getActivity().RESULT_OK && result.getData() != null) {
-                        Uri uri = result.getData().getData();
-                        if (uri != null && imagePreview != null) {
-                            imagePreview.setImageURI(uri);
-                            imagePreview.setTag(uri.toString());
-                        }
+                    if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
+                        Uri sourceUri = result.getData().getData();
+                        Uri localUri = copyImageToInternalStorage(sourceUri);
+
+                        imagePreview.setImageURI(localUri);
+                        imagePreview.setTag(localUri.toString());
                     }
                 }
         );
-
 
         // Cargar SharedPreferences
         prefs = requireContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
@@ -171,11 +184,12 @@ public class HomeFragment extends Fragment {
 
             ImageView img = card.findViewById(R.id.imgProduct);
             if (!imageUri.isEmpty()) {
-                System.out.println("IMAGE URI: " + imageUri);
-                img.setImageURI(Uri.parse(imageUri));
-            } else {
-                System.out.println("IMAGE URI:2 " + imageUri);
-                img.setImageResource(R.drawable.ic_product_placeholder);
+                File file = new File(imageUri.replace("file://", ""));
+                if (file.exists()) {
+                    img.setImageURI(Uri.fromFile(file));
+                } else {
+                    img.setImageResource(R.drawable.ic_product_placeholder);
+                }
             }
 
             card.setOnClickListener(v -> {
@@ -244,88 +258,123 @@ public class HomeFragment extends Fragment {
 
 
     private void editProduct(String rawProduct) {
+
         String[] parts = rawProduct.split("\\|");
 
         String name = parts[0];
         double price = Double.parseDouble(parts[1]);
-        long minutes = Long.parseLong(parts[2]);
         String imageUri = parts.length > 3 ? parts[3] : "";
         String link = parts.length > 4 ? parts[4] : "";
 
-        // Abrir diálogo de edición
         LinearLayout layout = new LinearLayout(getContext());
         layout.setOrientation(LinearLayout.VERTICAL);
-        layout.setPadding(32,16,32,0);
-
-        EditText etName = new EditText(getContext());
-        etName.setText(name);
-        etName.setHint("Nombre del producto");
-
-        EditText etPrice = new EditText(getContext());
-        etPrice.setText(String.valueOf(price));
-        etPrice.setHint("Precio (€)");
-
-        EditText etLink = new EditText(getContext());
-        etLink.setText(link);
-        etLink.setHint("Link (opcional)");
+        layout.setPadding(48, 24, 48, 16);
+        layout.setGravity(Gravity.CENTER_HORIZONTAL);
 
         ImageView imgPreview = new ImageView(getContext());
         imgPreview.setImageResource(R.drawable.ic_product_placeholder);
+        imgPreview.setAdjustViewBounds(true);
+        imgPreview.setMaxHeight(300);
+
         if (!imageUri.isEmpty()) {
             imgPreview.setImageURI(Uri.parse(imageUri));
             imgPreview.setTag(imageUri);
         }
-        imgPreview.setAdjustViewBounds(true);
-        imgPreview.setMaxHeight(300);
 
         Button btnImage = new Button(getContext());
-        btnImage.setText("Cambiar imagen");
+        btnImage.setText(getString(R.string.change_image));
 
         btnImage.setOnClickListener(v -> {
             imagePreview = imgPreview;
-
-            Intent intent = new Intent(
-                    Intent.ACTION_PICK,
-                    android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.setType("image/*");
+            intent.addFlags(
+                    Intent.FLAG_GRANT_READ_URI_PERMISSION |
+                            Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION
             );
             imagePickerLauncher.launch(intent);
+
         });
 
-
-        layout.addView(etName);
-        layout.addView(etPrice);
-        layout.addView(etLink);
         layout.addView(imgPreview);
         layout.addView(btnImage);
 
-        new AlertDialog.Builder(getContext())
-                .setTitle("Editar producto")
+        layout.addView(createLabel(getString(R.string.product_name_hint)));
+
+        EditText etName = new EditText(getContext());
+        etName.setText(name);
+        etName.setSingleLine(true);
+        etName.setFilters(new InputFilter[]{ new InputFilter.LengthFilter(40) });
+        layout.addView(etName);
+
+        layout.addView(createLabel(getString(R.string.price)));
+
+        EditText etPrice = new EditText(getContext());
+        etPrice.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+        etPrice.setText(String.valueOf(price));
+        layout.addView(etPrice);
+
+        layout.addView(createLabel(getString(R.string.product_link_hint)));
+
+        EditText etLink = new EditText(getContext());
+        etLink.setText(link);
+        layout.addView(etLink);
+
+        AlertDialog dialog = new AlertDialog.Builder(getContext())
+                .setTitle(getString(R.string.edit_product_title))
                 .setView(layout)
-                .setPositiveButton("Guardar", (d, w) -> {
-                    String newName = etName.getText().toString().trim();
-                    double newPrice = Double.parseDouble(etPrice.getText().toString().trim());
-                    String newLink = etLink.getText().toString().trim();
-                    String newImage = imgPreview.getTag() != null ? imgPreview.getTag().toString() : "";
+                .setPositiveButton(getString(R.string.save), null)
+                .setNegativeButton(getString(R.string.cancel), null)
+                .create();
 
-                    // Recalcular tiempo automáticamente según salario
-                    double salary = Double.parseDouble(SharedPrefManager.getSalary(getContext()));
-                    boolean isAnnual = SharedPrefManager.getSalaryType(getContext());
-                    double salaryPerHour = isAnnual ? salary/12/160 : salary;
-                    long newMinutes = Math.round((newPrice / salaryPerHour) * 60);
+        dialog.setOnShowListener(d -> {
+            Button btnSave = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
 
-                    SharedPrefManager.updateProduct(
-                            requireContext(),
-                            rawProduct,
-                            newName,
-                            newPrice,
-                            newImage,
-                            newLink
-                    );
+            btnSave.setOnClickListener(v -> {
 
-                    loadSavedProducts();
-                })
-                .setNegativeButton("Cancelar", null)
-                .show();
+                String newName = etName.getText().toString().trim();
+                String priceText = etPrice.getText().toString().trim();
+
+                if (newName.isEmpty()) {
+                    etName.setError(getString(R.string.product_name_required));
+                    etName.requestFocus();
+                    return;
+                }
+
+                if (priceText.isEmpty()) {
+                    etPrice.setError(getString(R.string.price_required));
+                    etPrice.requestFocus();
+                    return;
+                }
+
+                double newPrice = Double.parseDouble(priceText);
+                String newLink = etLink.getText().toString().trim();
+                String newImage = imgPreview.getTag() != null ? imgPreview.getTag().toString() : "";
+
+                SharedPrefManager.updateProduct(
+                        requireContext(),
+                        rawProduct,
+                        newName,
+                        newPrice,
+                        newImage,
+                        newLink
+                );
+
+                loadSavedProducts();
+                dialog.dismiss();
+            });
+        });
+
+        dialog.show();
+    }
+
+    private TextView createLabel(String text) {
+        TextView tv = new TextView(getContext());
+        tv.setText(text);
+        tv.setTextSize(12);
+        tv.setTextColor(Color.GRAY);
+        tv.setPadding(0, 16, 0, 4);
+        return tv;
     }
 
     void checkAndDecrementProductSlots()
@@ -337,66 +386,36 @@ public class HomeFragment extends Fragment {
         }
     }
 
-/*
-    private void showEditProductDialog(
-            String rawProduct,
-            String name,
-            String price,
-            String minutes,
-            String imageUri,
-            String link
-    ) {
-        LinearLayout layout = new LinearLayout(getContext());
-        layout.setOrientation(LinearLayout.VERTICAL);
-        layout.setPadding(32, 16, 32, 0);
+    private Uri copyImageToInternalStorage(Uri sourceUri) {
+        try {
+            InputStream inputStream = requireContext()
+                    .getContentResolver()
+                    .openInputStream(sourceUri);
 
-        EditText etName = new EditText(getContext());
-        etName.setText(name);
+            File file = new File(
+                    requireContext().getFilesDir(),
+                    "product_" + System.currentTimeMillis() + ".jpg"
+            );
 
-        EditText etPrice = new EditText(getContext());
-        etPrice.setText(price);
+            FileOutputStream outputStream = new FileOutputStream(file);
 
-        EditText etLink = new EditText(getContext());
-        etLink.setText(link);
+            byte[] buffer = new byte[1024];
+            int len;
+            while ((len = inputStream.read(buffer)) > 0) {
+                outputStream.write(buffer, 0, len);
+            }
 
-        ImageView img = new ImageView(getContext());
-        if (!imageUri.isEmpty()) {
-            img.setImageURI(Uri.parse(imageUri));
-            img.setTag(imageUri);
+            inputStream.close();
+            outputStream.close();
+
+            return Uri.fromFile(file);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
-
-        Button btnImage = new Button(getContext());
-        btnImage.setText("Cambiar imagen");
-
-        imagePreview = img;
-        btnImage.setOnClickListener(v ->
-                imagePickerLauncher.launch("image/*")
-        );
-
-        layout.addView(etName);
-        layout.addView(etPrice);
-        layout.addView(etLink);
-        layout.addView(img);
-        layout.addView(btnImage);
-
-        new AlertDialog.Builder(getContext())
-                .setTitle("Editar producto")
-                .setView(layout)
-                .setPositiveButton("Guardar", (d, w) -> {
-                    SharedPrefManager.updateProduct(
-                            requireContext(),
-                            rawProduct,
-                            etName.getText().toString(),
-                            Double.parseDouble(etPrice.getText().toString()),
-                            img.getTag() != null ? img.getTag().toString() : "",
-                            etLink.getText().toString()
-                    );
-                    loadSavedProducts();
-                })
-                .setNegativeButton("Cancelar", null)
-                .show();
     }
-    */
+
 
     private void updateRemainingMoneyCard() {
         System.out.println("REMAINING MONEY CARD: " + SharedPrefManager.isSpendingModeEnabled(requireContext()));

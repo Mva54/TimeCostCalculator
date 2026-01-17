@@ -17,31 +17,41 @@
             android:layout_height="wrap_content"
             android:text="@string/month"
             android:textStyle="bold"
-            android:textSize="16sp" />
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:layout_marginBottom="5dp"/>
 
         <TextView
             android:id="@+id/tvMoney"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/saved_money_card" />
+            android:textColor="@color/black"
+            android:text="@string/saved_money_card"
+            android:layout_marginBottom="5dp"/>
 
         <TextView
             android:id="@+id/tvTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/saved_time_card" />
+            android:textColor="@color/black"
+            android:text="@string/saved_time_card"
+            android:layout_marginBottom="5dp"/>
 
         <TextView
             android:id="@+id/tvSavings"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/monthly_saves" />
+            android:textColor="@color/black"
+            android:text="@string/monthly_saves"
+            android:layout_marginBottom="5dp"/>
 
         <TextView
             android:id="@+id/tvSpending"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/month_expenses" />
+            android:textColor="@color/black"
+            android:text="@string/month_expenses"
+            android:layout_marginBottom="5dp"/>
 
     </LinearLayout>
 </androidx.cardview.widget.CardView>

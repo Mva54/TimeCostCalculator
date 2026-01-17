@@ -24,22 +24,67 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
                 <!-- Título -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/salary_title"
                     android:textSize="16sp"
-                    android:textColor="#666666"
-                    android:layout_marginBottom="8dp"/>
+                    android:textColor="@color/black"/>
+
+                <ImageView
+                    android:id="@+id/btnSalaryInfo"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_marginStart="8dp"
+                    android:src="@drawable/ic_info"
+                    android:contentDescription="@string/info"
+                    android:clickable="true"
+                    android:focusable="true"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:layout_marginTop="16dp">
 
                 <!-- EditText para sueldo -->
                 <EditText
                     android:id="@+id/etSalary"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:hint="@string/salary_holder"
-                    android:inputType="numberDecimal"/>
+                    android:inputType="numberDecimal"
+                    android:layout_weight="1"/>
+
+                <!-- Horas mensuales (solo horario) -->
+                <EditText
+                    android:id="@+id/etMonthlyHours"
+                    android:layout_width="90dp"
+                    android:layout_height="match_parent"
+                    android:hint="160 h"
+                    android:inputType="number"
+                    android:textSize="14sp"
+                    android:visibility="gone"
+                    android:layout_marginStart="8dp"/>
+            </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="net or gross*"
+                    android:textSize="10sp"
+                    android:textColor="@color/black"
+                    android:layout_gravity="center"
+                    android:textStyle="italic"
+                    android:layout_marginEnd="0dp"/>
 
                 <!-- Contenedor para centrar el Switch en la parte inferior -->
                 <LinearLayout
@@ -54,7 +99,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/hourly"
                         android:textSize="14sp"
-                        android:textColor="#666666"
+                        android:textColor="@color/black"
                         android:layout_marginEnd="0dp"/>
 
                     <androidx.appcompat.widget.SwitchCompat
@@ -70,8 +115,9 @@
                         android:layout_height="wrap_content"
                         android:text="@string/annual"
                         android:textSize="14sp"
-                        android:textColor="#666666"
+                        android:textColor="@color/black"
                         android:layout_marginStart="8dp"/>
+
                 </LinearLayout>
 
             </LinearLayout>
@@ -99,12 +145,11 @@
                     android:gravity="center_vertical">
 
                     <TextView
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/savings_goal"
                         android:textSize="16sp"
-                        android:textColor="#666666"/>
+                        android:textColor="@color/black"/>
 
                     <ImageView
                         android:id="@+id/btnLimitInfo"
@@ -118,8 +163,10 @@
 
                     <androidx.appcompat.widget.SwitchCompat
                         android:id="@+id/switchLimitMode"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_gravity="end|center"/>
                 </LinearLayout>
 
                 <EditText
@@ -142,12 +189,18 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
         <!-- Tarjeta para moneda -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:cardCornerRadius="12dp"
-            app:cardElevation="6dp">
+            android:layout_weight="1"
+            android:layout_marginEnd="5dp">
 
             <LinearLayout
                 android:orientation="vertical"
@@ -160,7 +213,8 @@
                     android:layout_height="wrap_content"
                     android:text="@string/currency_title"
                     android:textSize="16sp"
-                    android:textColor="#666666"
+
+                    android:textColor="@color/black"
                     android:layout_marginBottom="8dp"/>
 
                 <Spinner
@@ -175,8 +229,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:cardCornerRadius="12dp"
-            app:cardElevation="6dp"
-            android:layout_marginTop="24dp">
+            android:layout_weight="1"
+            android:layout_marginEnd="5dp">
 
             <LinearLayout
                 android:orientation="vertical"
@@ -189,7 +243,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/language_title"
                     android:textSize="16sp"
-                    android:textColor="#666666"
+                    android:textColor="@color/black"
                     android:layout_marginBottom="8dp"/>
 
                 <Spinner
@@ -198,6 +252,52 @@
                     android:layout_height="wrap_content"/>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
+    </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/cardPremiumPromo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:padding="12dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:background="@drawable/bg_premium_card">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="5dp"
+                android:text="@string/profile_premium"
+                android:textSize="14sp"
+                android:textColor="#333333"/>
+
+            <TextView
+                android:id="@+id/btnGoPremium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="PREMIUM"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="6dp"
+                android:background="@drawable/bg_premium_button"/>
+        </LinearLayout>
+
+        <com.google.android.gms.ads.AdView
+            android:id="@+id/adView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            app:adSize="BANNER"
+            app:adUnitId="ca-app-pub-3940256099942544/9214589741" />
+
+        <Button
+            android:id="@+id/btnSubmitPremium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Premium"/>
 
         <LinearLayout
             android:id="@+id/cardPremiumPromo"
