@@ -1,145 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<!--
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:padding="24dp"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <androidx.cardview.widget.CardView
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-
-        app:cardCornerRadius="12dp"
-        app:cardElevation="4dp">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="💰 Dinero ahorrado"
-                android:textSize="14sp"
-                android:textColor="#666666"/>
-
-            <TextView
-                android:id="@+id/tvSavedMoney"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0 €"
-                android:textSize="26sp"
-                android:textStyle="bold"
-                android:layout_marginTop="4dp"/>
-
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
-
-    <androidx.cardview.widget.CardView
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:layout_marginBottom="8dp"
-        app:cardCornerRadius="12dp"
-        app:cardElevation="4dp">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="⏱ Tiempo ahorrado"
-                android:textSize="14sp"
-                android:textColor="#666666"/>
-
-            <TextView
-                android:id="@+id/tvSavedTime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0 horas"
-                android:textSize="22sp"
-                android:textStyle="bold"
-                android:layout_marginTop="4dp"/>
-
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Introduce tu sueldo neto:"
-        android:textSize="18sp"
-        android:textColor="#777777"
-        android:layout_marginBottom="8dp"/>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Sueldo">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etSalary"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="numberDecimal"/>
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:layout_marginTop="8dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Mensual"/>
-
-        <Switch
-            android:id="@+id/switchSalaryType"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="8dp"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Por hora"/>
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/btnCalculate"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Calcular tiempo de trabajo"/>
-
-
-    <Button
-        android:id="@+id/btnOpenSavedProducts"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Ver productos guardados"/>
-
-</LinearLayout>
--->
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_gradient">
 
 <!-- Contenedor para los fragments o layouts de cada pantalla -->
 <FrameLayout
@@ -205,6 +71,5 @@
             style="@style/Widget.Material3.Button.TextButton"/>
 
     </LinearLayout>
-
 
 </LinearLayout>

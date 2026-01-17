@@ -2,4 +2,8 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="primary">#85B387</color>       <!-- Verde -->
+    <color name="secondary">#FFB171</color>     <!-- Gris claro -->
+    <color name="danger">#F44336</color>        <!-- Rojo -->
+    <color name="premium_gold">#EFBF04</color>
 </resources>

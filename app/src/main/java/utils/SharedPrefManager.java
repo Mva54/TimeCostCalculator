@@ -21,6 +21,7 @@ public class SharedPrefManager {
     private static final String PREFS_NAME = "prefs";
 
     private static final String KEY_SALARY = "salary";
+    private static final String KEY_MONTHLY_HOURS = "monthly_hours";
     private static final String KEY_SALARY_TYPE = "salary_type";
     private static final String KEY_CURRENCY = "currency";
     private static final String KEY_LANGUAGE = "language";
@@ -301,6 +302,16 @@ public class SharedPrefManager {
                 .getString(KEY_SALARY, "");
     }
 
+    public static void saveMonthlyHours(Context ctx, String value) {
+        ctx.getSharedPreferences(PREFS_PROFILE, Context.MODE_PRIVATE)
+                .edit().putString(KEY_MONTHLY_HOURS, value).apply();
+    }
+
+    public static String getMonthlyHours(Context ctx) {
+        return ctx.getSharedPreferences(PREFS_PROFILE, Context.MODE_PRIVATE)
+                .getString(KEY_MONTHLY_HOURS, "");
+    }
+
     public static void saveSalaryType(Context ctx, boolean isAnnual) {
         ctx.getSharedPreferences(PREFS_PROFILE, Context.MODE_PRIVATE)
                 .edit().putBoolean(KEY_SALARY_TYPE, isAnnual).apply();
@@ -323,7 +334,7 @@ public class SharedPrefManager {
 
     public static String getCurrencySymbol(Context ctx) {
         int pos = getCurrency(ctx);
-        String[] symbols = {"€", "$", "£", "¥"};
+        String[] symbols = {"€", "$", "£", "Fr.", "¥"};
         return (pos >= 0 && pos < symbols.length) ? symbols[pos] : "€";
     }
 

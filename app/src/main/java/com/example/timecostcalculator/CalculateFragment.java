@@ -1,13 +1,16 @@
 package com.example.timecostcalculator;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
+import android.text.InputFilter;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,24 +24,22 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.ads.AdError;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.FullScreenContentCallback;
-import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.rewarded.RewardedAd;
-import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.io.OutputStream;
 
 import utils.SharedPrefManager;
 
@@ -49,9 +50,6 @@ public class CalculateFragment extends Fragment {
     private Button btnSubmitPrice;
     private ActivityResultLauncher<Intent> imagePickerLauncher;
     private ImageView imagePreview;
-
-    private RewardedAd rewardedAd;
-    private boolean rewardGranted = false;
 
     private static String auxProduct = "";
 
@@ -76,9 +74,7 @@ public class CalculateFragment extends Fragment {
             AdRequest adRequest = new AdRequest.Builder().build();
             adView.loadAd(adRequest);
             adView2.loadAd(adRequest);
-        }
-
-        if (SharedPrefManager.isPremium(getContext())) {
+        } else {
             adView.setVisibility(View.GONE);
             adView2.setVisibility(View.GONE);
         }
@@ -88,16 +84,19 @@ public class CalculateFragment extends Fragment {
         imagePickerLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
-                    if (result.getResultCode() == getActivity().RESULT_OK && result.getData() != null) {
+                    if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
 
-                        Uri uri = result.getData().getData();
-                        if (uri == null || imagePreview == null) return;
+                        Uri sourceUri = result.getData().getData();
+                        Uri localUri = copyImageToInternalStorage(sourceUri);
 
-                        imagePreview.setImageURI(uri);
-                        imagePreview.setTag(uri.toString()); // 🔑 guardamos URI
+                        if (localUri != null && imagePreview != null) {
+                            imagePreview.setImageURI(localUri);
+                            imagePreview.setTag(localUri.toString());
+                        }
                     }
                 }
         );
+
 
 
 
@@ -105,11 +104,14 @@ public class CalculateFragment extends Fragment {
         btnPriceInfo.setOnClickListener(v -> {
             new AlertDialog.Builder(requireContext())
                     .setTitle(getString(R.string.info))
-                    .setMessage(getString(R.string.info_calculate_price) + "\n\n" +
-                            getString(R.string.info_calculate_price_buy) + "\n" +
-                            getString(R.string.info_calculate_price_dont_buy) + "\n" +
-                            getString(R.string.info_calculate_price_save) + "\n" +
-                            getString(R.string.info_calculate_price_discard))
+                    .setMessage(
+                            getString(R.string.info_calculate_price) + "\n\n" +
+                            getString(R.string.info_calculate_price_actions) + "\n\n" +
+                            getString(R.string.info_calculate_price_buy) + "\n\n" +
+                            getString(R.string.info_calculate_price_dont_buy) + "\n\n" +
+                            getString(R.string.info_calculate_price_save) + "\n\n" +
+                            getString(R.string.info_calculate_price_discard)
+                    )
                     .setPositiveButton("OK", null)
                     .show();
         });
@@ -169,32 +171,44 @@ public class CalculateFragment extends Fragment {
         layout.setPadding(32, 32, 32, 32);
         layout.setGravity(Gravity.CENTER_HORIZONTAL);
 
-        // Resultado
-        TextView tvResult = new TextView(getContext());
-        if (jornadas > 0) {
-            tvResult.setText(
-                    getString(
-                            R.string.work_time_with_days,
-                            hours,
-                            minutes,
-                            jornadas,
-                            remainingHours
-                    )
-            );
-        } else {
-            tvResult.setText(
-                    getString(
-                            R.string.work_time_basic,
-                            hours,
-                            minutes
-                    )
-            );
-        }
+        TextView tvTitle = new TextView(getContext());
+        tvTitle.setText("Worth It?");
+        tvTitle.setTextSize(35);
+        tvTitle.setTypeface(Typeface.DEFAULT_BOLD);
+        tvTitle.setGravity(Gravity.CENTER);
+        tvTitle.setPadding(0, 24, 0, 24);
+        tvTitle.setTextColor(ContextCompat.getColor(getContext(), R.color.black));
 
-        tvResult.setTextSize(18);
-        tvResult.setPadding(0, 0, 0, 24);
-        tvResult.setGravity(Gravity.CENTER);
-        layout.addView(tvResult);
+
+        // Resultado
+        TextView tvPrevResult = new TextView(getContext());
+        tvPrevResult.setText(getString(R.string.work_time));
+        tvPrevResult.setTextSize(20);
+        //tvPrevResult.setTypeface(null, Typeface.BOLD);
+        tvPrevResult.setGravity(Gravity.CENTER);
+        tvPrevResult.setPadding(0, 16, 0, 8);
+
+        TextView tvMainResult = new TextView(getContext());
+        tvMainResult.setText(hours + " h " + minutes + " min");
+        tvMainResult.setTextSize(30);
+        tvMainResult.setTypeface(null, Typeface.BOLD);
+        tvMainResult.setGravity(Gravity.CENTER);
+        tvMainResult.setPadding(0, 16, 0, 8);
+
+        TextView tvSubResult = new TextView(getContext());
+        tvSubResult.setText(
+                jornadas > 0
+                        ? getString(R.string.work_time_with_days, hours, minutes, jornadas, remainingHours)
+                        : ""
+        );
+        tvSubResult.setTextSize(20);
+        tvSubResult.setTextColor(Color.GRAY);
+        tvSubResult.setGravity(Gravity.CENTER);
+
+        layout.addView(tvTitle);
+        layout.addView(tvPrevResult);
+        layout.addView(tvMainResult);
+        layout.addView(tvSubResult);
 
         // GridLayout para botones 2x2
         GridLayout buttonsLayout = new GridLayout(getContext());
@@ -210,11 +224,19 @@ public class CalculateFragment extends Fragment {
         Button btnBuy = new Button(getContext());
         btnBuy.setText(getString(R.string.buy));
         btnBuy.setLayoutParams(createButtonParams());
+        btnBuy.setBackgroundTintList(ColorStateList.valueOf(
+                ContextCompat.getColor(getContext(), R.color.primary)
+        ));
+        btnBuy.setTextColor(Color.WHITE);
         buttonsLayout.addView(btnBuy);
 
         Button btnNoBuy = new Button(getContext());
         btnNoBuy.setText(getString(R.string.dont_buy));
         btnNoBuy.setLayoutParams(createButtonParams());
+        btnNoBuy.setBackgroundTintList(ColorStateList.valueOf(
+                ContextCompat.getColor(getContext(), R.color.secondary)
+        ));
+        btnNoBuy.setTextColor(Color.WHITE);
         buttonsLayout.addView(btnNoBuy);
 
         Button btnSave = new Button(getContext());
@@ -223,15 +245,17 @@ public class CalculateFragment extends Fragment {
         buttonsLayout.addView(btnSave);
 
         Button btnDiscard = new Button(getContext());
-        btnDiscard.setText(R.string.discard);
+        btnDiscard.setText(getString(R.string.discard));
         btnDiscard.setLayoutParams(createButtonParams());
+        btnDiscard.setBackgroundColor(Color.TRANSPARENT);
+        btnDiscard.setTextColor(Color.GRAY);
         buttonsLayout.addView(btnDiscard);
 
         layout.addView(buttonsLayout);
 
         // Crear el popup
         AlertDialog dialog = new AlertDialog.Builder(getContext())
-                .setTitle(getString(R.string.result))
+                //.setTitle("Worth It?")
                 .setView(layout)
                 .setCancelable(true)
                 .create();
@@ -239,17 +263,34 @@ public class CalculateFragment extends Fragment {
         // Eventos de botones
         btnBuy.setOnClickListener(v -> {
             SharedPrefManager.setCurrentSpending(getContext(), price);
+            Toast.makeText(
+                    getContext(),
+                    getString(R.string.product_bought),
+                    Toast.LENGTH_LONG
+            ).show();
             dialog.dismiss();
         });
         btnNoBuy.setOnClickListener(v -> {
             saveResult(price, hours, minutes);
+            Toast.makeText(
+                    getContext(),
+                    getString(R.string.product_noBought),
+                    Toast.LENGTH_LONG
+            ).show();
             dialog.dismiss();
         });
         btnSave.setOnClickListener(v -> {
             showSaveProductDialog(price, hours, minutes);
             dialog.dismiss();
         });
-        btnDiscard.setOnClickListener(v -> dialog.dismiss());
+        btnDiscard.setOnClickListener(v -> {
+            dialog.dismiss();
+            Toast.makeText(
+                    getContext(),
+                    getString(R.string.product_discarted),
+                    Toast.LENGTH_LONG
+            ).show();
+        });
 
         dialog.show();
     }
@@ -263,27 +304,55 @@ public class CalculateFragment extends Fragment {
     }
 
     private void showSaveProductDialog(double price, int hours, int minutes) {
+
+        CardView card = new CardView(getContext());
+        card.setRadius(24f);
+        card.setCardElevation(12f);
+        card.setUseCompatPadding(true);
+
         LinearLayout layout = new LinearLayout(getContext());
         layout.setOrientation(LinearLayout.VERTICAL);
-        layout.setPadding(32, 16, 32, 0);
+        layout.setPadding(40, 32, 40, 24);
+
+        card.addView(layout);
+
+        //LinearLayout layout = new LinearLayout(getContext());
+        //layout.setOrientation(LinearLayout.VERTICAL);
+        //layout.setPadding(32, 16, 32, 0);
 
         EditText etName = new EditText(getContext());
         etName.setHint(getString(R.string.product_name_hint));
+        etName.setFilters(new InputFilter[]{
+                new InputFilter.LengthFilter(40)
+        });
+        etName.setSingleLine(true);
+        etName.setTextSize(16);
+        etName.setHintTextColor(Color.GRAY);
+        etName.setPadding(24, 20, 24, 20);
+        etName.setBackgroundResource(R.drawable.bg_input_rounded);
+
 
         EditText etLink = new EditText(getContext());
         etLink.setHint(getString(R.string.product_link_hint));
+        etName.setTextSize(16);
+        etName.setHintTextColor(Color.GRAY);
+        etName.setPadding(24, 20, 24, 20);
+        etName.setBackgroundResource(R.drawable.bg_input_rounded);
 
-        Button btnImage = new Button(getContext());
-        btnImage.setText(getString(R.string.add_image));
+
+        //Button btnImage = new Button(getContext());
+        //btnImage.setText(getString(R.string.add_image));
 
         ImageView imgPreview = new ImageView(getContext());
         imgPreview.setImageResource(R.drawable.ic_product_placeholder);
         imgPreview.setAdjustViewBounds(true);
-        imgPreview.setMaxHeight(300);
+        imgPreview.setMaxHeight(320);
+        imgPreview.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        imgPreview.setPadding(0, 16, 0, 16);
+        imgPreview.setBackgroundResource(R.drawable.bg_image_placeholder);
 
-        btnImage.setOnClickListener(v -> {
+        imgPreview.setOnClickListener(v -> {
             imagePreview = imgPreview;
-
             Intent intent = new Intent(
                     Intent.ACTION_PICK,
                     android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI
@@ -292,25 +361,62 @@ public class CalculateFragment extends Fragment {
         });
 
         layout.addView(etName);
+        addSpacer(layout, 12);
         layout.addView(etLink);
-        layout.addView(btnImage);
+        addSpacer(layout, 16);
         layout.addView(imgPreview);
 
-        new AlertDialog.Builder(getContext())
-                .setTitle(getString(R.string.save_product_title))
-                .setView(layout)
-                .setPositiveButton(getString(R.string.save), (d, w) -> {
-                    String name = etName.getText().toString().trim();
-                    String link = etLink.getText().toString().trim();
 
-                    if (!name.isEmpty()) {
-                        saveResultProduct(name, price, hours, minutes, imgPreview.getTag() != null
-                                ? imgPreview.getTag().toString()
-                                : "", link);
-                    }
-                })
+        AlertDialog dialog = new AlertDialog.Builder(getContext())
+                .setTitle(getString(R.string.save_product_title))
+                .setView(card)
+                .setPositiveButton(getString(R.string.save), null)
                 .setNegativeButton(getString(R.string.cancel), null)
-                .show();
+                .create();
+
+        dialog.setOnShowListener(d -> {
+            Button btnSave = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+
+            btnSave.setOnClickListener(v -> {
+                String name = etName.getText().toString().trim();
+                String link = etLink.getText().toString().trim();
+
+                if (name.isEmpty()) {
+                    etName.setError(getString(R.string.product_name_required));
+                    etName.requestFocus();
+                    return;
+                }
+
+                saveResultProduct(
+                        name,
+                        price,
+                        hours,
+                        minutes,
+                        imgPreview.getTag() != null
+                                ? imgPreview.getTag().toString()
+                                : "",
+                        link
+                );
+
+                dialog.dismiss();
+            });
+        });
+
+        dialog.show();
+
+    }
+
+    private void addSpacer(LinearLayout layout, int dp) {
+        View spacer = new View(layout.getContext());
+        spacer.setLayoutParams(new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                (int) TypedValue.applyDimension(
+                        TypedValue.COMPLEX_UNIT_DIP,
+                        dp,
+                        layout.getResources().getDisplayMetrics()
+                )
+        ));
+        layout.addView(spacer);
     }
 
 
@@ -332,30 +438,79 @@ public class CalculateFragment extends Fragment {
                 link
         );
 
-        //saveResult(price, hours, minutes);
-
         if (!saved) {
             auxProduct = name + "|" + price + "|" + hours + "|" + minutes + "|" + imageUri + "|" + link;
             showPremiumDialog();
+            return;
         }
+
+        Toast.makeText(
+                getContext(),
+                getString(R.string.product_save),
+                Toast.LENGTH_LONG
+        ).show();
     }
 
     private void showPremiumDialog() {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(getString(R.string.text_premium2)).append("\n\n").
-                append(getString(R.string.text_premium3));
-        new AlertDialog.Builder(getContext())
-                .setTitle(getString(R.string.limit_reached))
-                .setMessage(stringBuilder)
+        LinearLayout layout = new LinearLayout(getContext());
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.setPadding(48, 32, 48, 24);
+        layout.setGravity(Gravity.CENTER_HORIZONTAL);
+
+        ImageView icon = new ImageView(getContext());
+        icon.setImageResource(R.drawable.ic_premium); // estrella, corona, etc
+        icon.setColorFilter(getResources().getColor(R.color.premium_gold));
+        icon.setLayoutParams(new LinearLayout.LayoutParams(120, 120));
+        layout.addView(icon);
+
+        TextView title = new TextView(getContext());
+        title.setText(getString(R.string.limit_reached));
+        title.setTextSize(18);
+        title.setTypeface(null, Typeface.BOLD);
+        title.setPadding(0, 16, 0, 8);
+        title.setGravity(Gravity.CENTER);
+        layout.addView(title);
+
+        TextView description = new TextView(getContext());
+        description.setText(getString(R.string.text_premium_short));
+        description.setTextSize(14);
+        description.setTextColor(Color.DKGRAY);
+        description.setGravity(Gravity.CENTER);
+        layout.addView(description);
+
+        LinearLayout benefits = new LinearLayout(getContext());
+        benefits.setOrientation(LinearLayout.VERTICAL);
+        benefits.setPadding(0, 24, 0, 24);
+
+        benefits.addView(createBenefit(getString(R.string.info_premium_history)));
+        benefits.addView(createBenefit(getString(R.string.info_premium_products)));
+        benefits.addView(createBenefit(getString(R.string.info_premium_ads)));
+
+        layout.addView(benefits);
+
+        AlertDialog dialog = new AlertDialog.Builder(getContext())
+                .setView(layout)
                 .setPositiveButton(getString(R.string.update_premium), (d, w) -> {
-                    // futuro: abrir pantalla de pago
+                    // abrir pantalla de pago
                 })
                 .setNegativeButton(getString(R.string.watch_ad), (d, w) -> {
                     showRewardedAd();
                 })
-                .setCancelable(true)
-                .show();
+                .create();
+
+        dialog.show();
+
     }
+
+    private TextView createBenefit(String text) {
+        TextView tv = new TextView(getContext());
+        tv.setText("✔ " + text);
+        tv.setTextSize(14);
+        tv.setTextColor(Color.BLACK);
+        tv.setPadding(0, 8, 0, 8);
+        return tv;
+    }
+
 
     public void unlockOneSlot(Context ctx) {
         SharedPrefManager.incrementProdcutSlots(ctx);
@@ -368,35 +523,6 @@ public class CalculateFragment extends Fragment {
 
         auxProduct = "";
     }
-
-    private String copyImageToInternalStorage(Uri uri) {
-        try {
-            InputStream inputStream =
-                    requireContext().getContentResolver().openInputStream(uri);
-
-            File dir = new File(requireContext().getFilesDir(), "products");
-            if (!dir.exists()) dir.mkdirs();
-
-            File file = new File(dir, "product_" + System.currentTimeMillis() + ".jpg");
-
-            OutputStream outputStream = new FileOutputStream(file);
-
-            byte[] buffer = new byte[4096];
-            int bytesRead;
-            while ((bytesRead = inputStream.read(buffer)) != -1) {
-                outputStream.write(buffer, 0, bytesRead);
-            }
-
-            inputStream.close();
-            outputStream.close();
-
-            return file.getAbsolutePath(); // ⬅️ SIN file://
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "";
-        }
-    }
-
 
     private void showRewardedAd() {
         if (AdManager.getRewaredAd() == null) {
@@ -421,7 +547,6 @@ public class CalculateFragment extends Fragment {
         AdManager.getRewaredAd().show(requireActivity(), rewardItem -> {
             // 🎁 RECOMPENSA
             unlockOneSlot(requireContext());
-            rewardGranted = true;
 
             Toast.makeText(
                     getContext(),
@@ -430,6 +555,37 @@ public class CalculateFragment extends Fragment {
             ).show();
         });
     }
+
+    private Uri copyImageToInternalStorage(Uri sourceUri) {
+        try {
+            InputStream inputStream = requireContext()
+                    .getContentResolver()
+                    .openInputStream(sourceUri);
+
+            File file = new File(
+                    requireContext().getFilesDir(),
+                    "product_" + System.currentTimeMillis() + ".jpg"
+            );
+
+            FileOutputStream outputStream = new FileOutputStream(file);
+
+            byte[] buffer = new byte[1024];
+            int len;
+            while ((len = inputStream.read(buffer)) > 0) {
+                outputStream.write(buffer, 0, len);
+            }
+
+            inputStream.close();
+            outputStream.close();
+
+            return Uri.fromFile(file);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 
 
 

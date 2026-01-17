@@ -49,7 +49,7 @@ public class BillingManager {
         });
     }
 
-    // 🔥 AQUÍ SE LANZA LA COMPRA
+    // AQUÍ SE LANZA LA COMPRA
     public void launchPremiumPurchase() {
 
         QueryProductDetailsParams params =

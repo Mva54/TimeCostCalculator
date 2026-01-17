@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">TimeCostCalculator</string>
+    <string name="app_name">Worth It</string>
     <string name="salary_title">💼 El teu sou</string>
-    <string name="salary_holder">Introdueix el teu salari (net o brut)</string>
+    <string name="salary_holder">Introdueix el teu salari</string>
     <string name="hourly">Horari</string>
     <string name="annual">Anual</string>
     <string name="currency_title">💱 Moneda</string>
@@ -20,9 +20,10 @@
     <string name="save">Guardar</string>
     <string name="discard">Descartar</string>
 
+    <string name="work_time">Necessites treballar:</string>
     <string name="work_time_basic">Necessites treballar: %1$dh %2$dm</string>
     <string name="work_time_with_days">
-        Necessites treballar: %1$dh %2$dm\no %3$d dies i %4$d hores
+        o %3$d dies i %4$d hores
     </string>
 
     <string name="savings_goal">🎯 Límit màxim de despesa</string>
@@ -33,6 +34,8 @@
     <string name="product_name_hint">Nom del producte</string>
     <string name="product_link_hint">Enllaç del producte (opcional)</string>
     <string name="add_image">Afegir imatge</string>
+    <string name="change_image">Canviar imatge</string>
+    <string name="price_required">Has d\'indicar un preu</string>
     <string name="edit_product_title">Editar producte</string>
     <string name="save_product_title">Guardar producte</string>
     <string name="delete_product_title">Eliminar producte</string>
@@ -57,25 +60,39 @@ Pots editar el teu salari a Perfil per recalcular automàticament els temps dels
 </string>
 
     <string name="info_calculate_price">
-Introdueix el preu del producte que vols calcular. L\'app calcularà quant temps necessites treballar segons el teu sou.
+Introdueix el preu del producte i descobreix quant de temps de treball costa segons el teu salari.</string>
+
+    <string name="info_calculate_price_actions">
+Què hi pots fer després?
 </string>
 
-    <string name="info_calculate_price_buy">• Botó "Comprar": El temps calculat t\'ha semblat adequat, així que has optat per comprar el producte. Aquesta decisió no influeix en els teus estalvis.</string>
+    <string name="info_calculate_price_buy">
+🛒 Comprar.
+El temps et sembla raonable i decideixes comprar el producte. No afecta els teus estalvis.
+</string>
 
-    <string name="info_calculate_price_dont_buy">• Botó "No comprar": Decideixes no comprar el producte, els diners es guarden com a estalvi i el temps se suma al teu temps estalviat.</string>
+    <string name="info_calculate_price_dont_buy">
+💰 No comprar.
+Decideixes no comprar\-ho. Els diners i el temps es registren com a estalvi.
+</string>
 
-    <string name="info_calculate_price_save">• Botó "Guardar": Guarda el producte per revisar-lo més endavant i decidir què fer-ne. Pots afegir nom, imatge i enllaç.</string>
+    <string name="info_calculate_price_save">
+💾 Desa.
+Desa\'l per decidir més endavant. Pots afegir nom, imatge i enllaç.
+</string>
 
-    <string name="info_calculate_price_discard">• Botó "Descartar": Tanca la finestra de resultats sense guardar ni modificar res.</string>
+    <string name="info_calculate_price_discard">
+❌ Descartar.
+Tanques el resultat sense desar ni canviar res.
+</string>
 
-    <string name="info_limit">En activar el mode de control de despeses, pots indicar un límit màxim mensual de consum del teu sou. Aquest mode no t\'impedeix gastar més.</string>
-
+    <string name="info_limit">En activar el mode de control de despeses, podeu indicar un límit màxim mensual de consum del vostre sou. Aquesta manera no t\'impedeix de gastar de més.</string>
     <string name="info_limit_save">Això suposa estalviar aproximadament un %1$.1f%% del teu sou mensual</string>
 
     <string name="info">Informació</string>
 
     <string name="premium_history_warning">Estàs veient només l\'últim mes</string>
-    <string name="premium_history_unlock">⭐ Desbloqueja l\'historial mensual complet i fins a 6 mesos al gràfic amb Premium</string>
+    <string name="premium_history_unlock">⭐ Desbloqueja l\'historial mensual complet i la vista de gràfic amb Premium</string>
 
     <string name="month">Mes</string>
     <string name="saved_money_card">Diners estalviats: </string>
@@ -85,18 +102,39 @@ Introdueix el preu del producte que vols calcular. L\'app calcularà quant temps
 
     <string name="profile_premium">⭐ Productes il·limitats, historial complet i zero anuncis</string>
     <string name="history_title">Resum Mensual</string>
+    <string name="stats_title">Estadístiques</string>
 
     <string name="text_premium2">Només pots guardar fins a 3 productes a la versió gratuïta.</string>
-    <string name="text_premium1">⭐ Vols guardar més productes? Passa\'t a Premium</string>
+    <string name="text_premium1">Vols guardar més productes? Passa\'t a Premium</string>
     <string name="text_premium3">Obtén Premium per tenir guardats il·limitats o mira un anunci per obtenir un guardat addicional.</string>
 
     <string name="home_premium_warning">Només tens accés als últims tres productes</string>
 
     <string name="limit_reached">Límit assolit!</string>
-    <string name="update_premium">Actualitzar a Premium</string>
+    <string name="update_premium">Fer-me Premium</string>
     <string name="watch_ad">Veure anunci</string>
     <string name="no_ad">Anunci no disponible ara</string>
     <string name="extra_slot">Has obtingut un guardat extra!</string>
 
     <string name="history_tag">Diners gastats</string>
+
+    <string name="product_name_required">El nom és obligatori</string>
+    <string name="product_bought">¡Has comprat el producte!</string>
+    <string name="product_noBought">¡Temps i diners estalviats!</string>
+    <string name="product_save">¡S\'ha guardat el producte!</string>
+    <string name="product_discarted">Producte descartat</string>
+
+    <string name="info_salary">Introdueix el teu salari horari o anual, brut o net.</string>
+    <string name="info_salary2">WorthIt el farà servir només per a calcular el temps de treball necessari per comprar un producte.</string>
+    <string name="info_salary3">Com més precisa sigui la dada, más realista serà el resultat.</string>
+
+    <string name="text_premium_short">
+Has assolit el límit gratuït de l\'app.
+Desbloqueja tot el potencial de WorthIt.
+</string>
+
+    <string name="info_premium_history">Historial complet de despeses</string>
+    <string name="info_premium_products">Productes il·limitats</string>
+    <string name="info_premium_ads">Sense anuncis</string>
+
 </resources>

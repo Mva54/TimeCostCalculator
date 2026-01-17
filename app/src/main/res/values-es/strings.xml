@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">TimeCostCalculator</string>
+    <string name="app_name">Worth It</string>
     <string name="salary_title">💼 Tu sueldo</string>
-    <string name="salary_holder">Introduce tu salario (neto o bruto)</string>
+    <string name="salary_holder">Introduce tu salario</string>
     <string name="hourly">Horario</string>
     <string name="annual">Anual</string>
     <string name="currency_title">💱 Moneda</string>
@@ -19,9 +19,10 @@
     <string name="dont_buy">No comprar</string>
     <string name="save">Guardar</string>
     <string name="discard">Descartar</string>
+    <string name="work_time">Necesitas trabajar:</string>
     <string name="work_time_basic">Necesitas trabajar: %1$dh %2$dm</string>
     <string name="work_time_with_days">
-        Necesitas trabajar: %1$dh %2$dm\no %3$d días y %4$d horas
+        o %3$d días y %4$d horas
     </string>
 
     <string name="savings_goal">🎯 Límite de gasto máximo</string>
@@ -33,13 +34,15 @@
     <string name="product_name_hint">Nombre del producto</string>
     <string name="product_link_hint">Link del producto (opcional)</string>
     <string name="add_image">Añadir imagen</string>
+    <string name="change_image">Cambiar imagen</string>
+    <string name="price_required">Debes indicar un precio</string>
     <string name="edit_product_title">Editar producto</string>
     <string name="save_product_title">Guardar producto</string>
     <string name="delete_product_title">Eliminar producto</string>
     <string name="delete_product_message">¿Seguro que quieres eliminar este producto?</string>
     <string name="premium_limit_title">Límite alcanzado</string>
     <string name="premium_limit_message">Solo puedes guardar hasta 3 productos en la versión gratuita.</string>
-    <string name="upgrade_premium">Actualizar a Premium</string>
+    <string name="upgrade_premium">Hazte Premium</string>
     <string name="cancel">Cancelar</string>
     <string name="warning">¡Debes introducir un precio!</string>
     <string name="saved_products">Productos guardados</string>
@@ -54,16 +57,37 @@ Opciones de cada producto: Comprar, Editar o No comprar (lo que se ahorra se sum
 Puedes editar tu salario en Perfil para recalcular automáticamente los tiempos de los productos guardados.
 </string>
     <string name="info_calculate_price">
-Introduce el precio del producto que quieres calcular. La app calculará cuánto tiempo necesitas trabajar según tu salario.</string>
-    <string name="info_calculate_price_buy">• Botón "Comprar": El tiempo calculado te ha parecido adecuado, por lo que has optado por comprar el producto. Esta decisión no influye en tus ahorros.</string>
-    <string name="info_calculate_price_dont_buy">• Botón "No comprar": Decides no comprar el producto, el dinero se guarda como ahorro y el tiempo se suma a tu tiempo ahorrado.</string>
-    <string name="info_calculate_price_save">• Botón "Guardar": Guarda el producto para revisarlo más tarde y decidir qué hacer con él. Puedes añadir nombre, imagen y link.</string>
-    <string name="info_calculate_price_discard">• Botón "Descartar": Cierra la ventana de resultados sin guardar ni modificar nada.</string>
+Introduce el precio del producto y descubre cuánto tiempo de trabajo cuesta según tu salario.</string>
+
+    <string name="info_calculate_price_actions">
+¿Qué puedes hacer después?
+</string>
+
+    <string name="info_calculate_price_buy">
+🛒 Comprar.
+El tiempo te parece razonable y decides comprar el producto. No afecta a tus ahorros.
+</string>
+
+    <string name="info_calculate_price_dont_buy">
+💰 No comprar.
+Decides no comprarlo. El dinero y el tiempo se registran como ahorro.
+</string>
+
+    <string name="info_calculate_price_save">
+💾 Guardar.
+Guárdalo para decidir más adelante. Puedes añadir nombre, imagen y enlace.
+</string>
+
+    <string name="info_calculate_price_discard">
+❌ Descartar.
+Cierras el resultado sin guardar ni cambiar nada.
+</string>
+
     <string name="info_limit">Al activar el modo de control de gastos, puedes indicar un límite máximo mensual de consumo de tu sueldo. Este modo no te impide gastar de más.</string>
     <string name="info_limit_save">Esto supone ahorrar aproximadamente un %.1f%% de tu sueldo mensual</string>
     <string name="info">Información</string>
     <string name="premium_history_warning">Estás viendo solo el último mes</string>
-    <string name="premium_history_unlock">⭐ Desbloquea el historial mensual completo y hasta 6 meses en el gráfico con Premium</string>
+    <string name="premium_history_unlock">⭐ Desbloquea el historial mensual completo y la vista de gráfico con Premium</string>
     <string name="month">Mes</string>
     <string name="saved_money_card">Dinero ahorrado: </string>
     <string name="saved_time_card">Tiempo ahorrado: </string>
@@ -71,15 +95,35 @@ Introduce el precio del producto que quieres calcular. La app calculará cuánto
     <string name="month_expenses">Dinero gastado: </string>
     <string name="profile_premium">⭐ Productos ilimitados, historial completo y cero anuncios</string>
     <string name="history_title">Resumen Mensual</string>
+    <string name="stats_title">Estadísticas</string>
     <string name="text_premium2">Solo puedes guardar hasta 3 productos en la versión gratuita.</string>
-    <string name="text_premium1">⭐ ¿Quieres guardar más productos? Pásate a Premium</string>
+    <string name="text_premium1">¿Quieres guardar más productos? Pásate a Premium</string>
     <string name="text_premium3">Obtén Premium para obtener guardados sin límite o mira un anuncio para obtener un guardado adicional. </string>
     <string name="home_premium_warning">Tan solo tienes acceso a los últimos tres productos</string>
     <string name="limit_reached">¡Límite alcanzado!</string>
-    <string name="update_premium">Actualizar a Premium</string>
+    <string name="update_premium">Hacerme Premium</string>
     <string name="watch_ad">Ver Anuncio</string>
     <string name="no_ad">Anuncio no disponible ahora</string>
     <string name="extra_slot">¡Has obtenido un guardado extra!</string>
     <string name="history_tag">Dinero gastado</string>
+
+    <string name="product_name_required">El nombre es obligatorio</string>
+    <string name="product_bought">¡Has comprado el producto!</string>
+    <string name="product_noBought">¡Tiempo y dinero ahorrados!</string>
+    <string name="product_save">¡Se ha guardado el producto!</string>
+    <string name="product_discarted">Producto descartado</string>
+
+    <string name="info_salary">Introduce tu salario horario o anual, en bruto o neto.</string>
+    <string name="info_salary2">WorthIt lo usará únicamente para calcular el tiempo de trabajo necesario para comprar un producto.</string>
+    <string name="info_salary3">Cuanto más preciso sea el dato, más realista será el resultado.</string>
+
+    <string name="text_premium_short">
+Has alcanzado el límite gratuito de la app.
+Desbloquea todo el potencial de WorthIt.
+</string>
+
+    <string name="info_premium_history">Historial completo de gastos</string>
+    <string name="info_premium_products">Productos ilimitados</string>
+    <string name="info_premium_ads">Sin anuncios</string>
 
 </resources>

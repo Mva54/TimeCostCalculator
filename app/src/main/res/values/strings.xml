@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">TimeCostCalculator</string>
+    <string name="app_name">Worth It</string>
     <string name="salary_title">💼 Your salary</string>
-    <string name="salary_holder">Indicate your salary (net or gross)</string>
+    <string name="salary_holder">Indicate your salary</string>
     <string name="hourly">Hourly</string>
     <string name="annual">Annual</string>
     <string name="currency_title">💱 Currency</string>
@@ -19,9 +19,10 @@
     <string name="dont_buy">Don\'t buy</string>
     <string name="save">Save</string>
     <string name="discard">Discard</string>
+    <string name="work_time">You need to work:</string>
     <string name="work_time_basic">You need to work: %1$dh %2$dm</string>
     <string name="work_time_with_days">
-        You need to work: %1$dh %2$dm\nor %3$d days and %4$d hours
+        or %3$d days and %4$d hours
     </string>
 
     <string name="savings_goal">🎯 Spending limit</string>
@@ -33,6 +34,8 @@
     <string name="product_name_hint">Product name</string>
     <string name="product_link_hint">Product link (optional)</string>
     <string name="add_image">Add image</string>
+    <string name="change_image">Change image</string>
+    <string name="price_required">You must specify a price</string>
     <string name="edit_product_title">Edit product</string>
     <string name="save_product_title">Save product</string>
     <string name="delete_product_title">Delete product</string>
@@ -54,18 +57,39 @@ Opciones de cada producto: Comprar, Editar o No comprar (lo que se ahorra se sum
 Puedes editar tu salario en Perfil para recalcular automáticamente los tiempos de los productos guardados.
 </string>
     <string name="info_calculate_price">
-Enter the price of the product you want to calculate. The app will compute how much work time you need based on your salary.</string>
-    <string name="info_calculate_price_buy">• "Buy" button: This decision does not affect your savings.</string>
-    <string name="info_calculate_price_dont_buy">• "Don't Buy" button: Money and time are added to your savings.</string>
-    <string name="info_calculate_price_save">• "Save" button: Saves the product to review it later.</string>
-    <string name="info_calculate_price_discard">• "Discard" button: Closes the results window without saving or modifying anything.</string>
+Enter the product price and find out how much labor time it costs based on your salary.</string>
+
+    <string name="info_calculate_price_actions">
+What can you do next?
+</string>
+
+    <string name="info_calculate_price_buy">
+🛒 Buy.
+The time seems reasonable, so you decide to purchase the product. It doesn\'t affect your savings.
+</string>
+
+    <string name="info_calculate_price_dont_buy">
+💰 Don\'t buy it.
+You decide not to buy it. The money and time are recorded as savings.
+</string>
+
+    <string name="info_calculate_price_save">
+💾 Save.
+Save it to decide later. You can add a name, image, and link.
+</string>
+
+    <string name="info_calculate_price_discard">
+❌ Discard.
+Close the result without saving or changing anything.
+</string>
     <string name="info_limit">By activating the expense control mode, you can set a maximum monthly spending limit on your salary. This mode does not prevent you from overspending.</string>
     <string name="info_limit_save">This represents a saving of approximately %.1f%% of your monthly salary</string>
     <string name="info">Information</string>
-    <string name="premium_history_unlock">⭐ Unlock full monthly history and up to 6 months in the chart with Premium</string>
+    <string name="premium_history_unlock">⭐ Unlock full monthly history and the view chart with Premium</string>
     <string name="history_title">Monthly Summary</string>
+    <string name="stats_title">Statistics</string>
     <string name="home_premium_warning">You only have access to the last three products</string>
-    <string name="text_premium1">⭐ Want to save more products? Go Premium</string>
+    <string name="text_premium1"> Want to save more products? Go Premium</string>
     <string name="premium_history_warning">You are viewing only the latest month</string>
     <string name="month">Month</string>
     <string name="saved_money_card">Money saved: </string>
@@ -76,10 +100,28 @@ Enter the price of the product you want to calculate. The app will compute how m
     <string name="text_premium2">You can only save up to 3 products in the free version.</string>
     <string name="text_premium3">Get Premium for unlimited saves or watch an ad to unlock one extra save.</string>
     <string name="limit_reached">Limit reached!</string>
-    <string name="update_premium">Upgrade to Premium</string>
+    <string name="update_premium">Become Premium</string>
     <string name="watch_ad">Watch Ad</string>
     <string name="no_ad">Ad not available right now</string>
     <string name="extra_slot">You\'ve unlocked an extra save!</string>
     <string name="history_tag">Money spent</string>
 
-    </resources>
+    <string name="product_name_required">The name is required</string>
+    <string name="product_bought">You have purchased the product!</string>
+    <string name="product_noBought">Time and money saved!</string>
+    <string name="product_save">The product has been saved!</string>
+    <string name="product_discarted">Discarded product</string>
+
+    <string name="info_salary">Enter your hourly or annual salary, gross or net.</string>
+    <string name="info_salary2">WorthIt will only use it to calculate the working time required to purchase a product.</string>
+    <string name="info_salary3">The more precise the data, the more realistic the result will be.</string>
+
+    <string name="text_premium_short">
+    You\'ve reached the app\'s free limit.
+    Unlock the full potential of WorthIt.
+    </string>
+
+    <string name="info_premium_history">Complete spending history</string>
+    <string name="info_premium_products">Unlimited products</string>
+    <string name="info_premium_ads">No ads</string>
+</resources>
