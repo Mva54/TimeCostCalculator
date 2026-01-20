@@ -297,7 +297,8 @@
             android:id="@+id/btnSubmitPremium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Premium"/>
+            android:text="Premium"
+            android:visibility="gone"/>
 
     </LinearLayout>
 </ScrollView>

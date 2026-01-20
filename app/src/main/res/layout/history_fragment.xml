@@ -5,6 +5,10 @@
     android:layout_height="match_parent"
     android:padding="16dp">
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"/>
+
     <com.github.mikephil.charting.charts.BarChart
         android:id="@+id/barChart"
         android:layout_width="match_parent"

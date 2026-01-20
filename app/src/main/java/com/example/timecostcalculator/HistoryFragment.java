@@ -149,8 +149,10 @@ public class HistoryFragment extends Fragment {
 
     private void loadHistoryChartWithProjection() {
         List<MonthStats> history = MonthlyManager.getHistory(requireContext(), historyStartIndex, SharedPrefManager.isPremium(getContext()) ? historyWindowSize : 1);
-        if (history.isEmpty()) return;
-        Collections.reverse(history);
+        //if (history.isEmpty()) return;
+
+        if (!history.isEmpty())
+            Collections.reverse(history);
 
         List<BarEntry> spentEntries = new ArrayList<>();
         List<String> labels = new ArrayList<>();

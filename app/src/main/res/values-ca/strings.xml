@@ -137,4 +137,15 @@ Desbloqueja tot el potencial de WorthIt.
     <string name="info_premium_products">Productes il·limitats</string>
     <string name="info_premium_ads">Sense anuncis</string>
 
+    <string name="new_month">Nou mes iniciat</string>
+    <string name="summary_of">Resum de</string>
+    <string name="saved_money_card2">Diners estalviats</string>
+    <string name="saved_time_card2">Temps estalviat</string>
+    <string name="monthly_saves2">Estalvis mensuals</string>
+    <string name="month_expenses2">Despeses totals</string>
+    <string name="remaining_limit">Límit restant</string>
+    <string name="continue_card">Continuar</string>
+
+
+
 </resources>

@@ -100,34 +100,12 @@ public class SharedPrefManager {
         );
     }
 
-    public static void changeCurrentSpending(Context ctx, double amount)
-    {
-        getPrefs(ctx).edit()
-                .putLong(KEY_CURRENT_SPENDING, Double.doubleToLongBits( amount))
-                .apply();
-    }
-
     public static double getRemainingSpending(Context ctx) {
-        System.out.println("getRemainingSpendingMAX: " + getMaxSpending(ctx));
-        System.out.println("getRemainingSpendingREM: " + getCurrentSpending(ctx));
-        System.out.println("getRemainingSpending: " + (getMaxSpending(ctx) - getCurrentSpending(ctx)));
         return getMaxSpending(ctx) - getCurrentSpending(ctx);
     }
 
     public static void setSavingsMode(Context ctx, boolean isActive) {
         getPrefs(ctx).edit().putBoolean(KEY_SAVINGS_MODE, isActive).apply();
-    }
-
-    public static boolean isSavingsModeActive(Context ctx) {
-        return getPrefs(ctx).getBoolean(KEY_SAVINGS_MODE, false);
-    }
-
-    public static void setSavingsGoal(Context ctx, double amount) {
-        getPrefs(ctx).edit().putLong(KEY_SAVINGS_GOAL, Double.doubleToLongBits(amount)).apply();
-    }
-
-    public static double getSavingsGoal(Context ctx) {
-        return Double.longBitsToDouble(getPrefs(ctx).getLong(KEY_SAVINGS_GOAL, Double.doubleToLongBits(0)));
     }
 
     public static void saveMonthlySavings(Context ctx, double amount) {
@@ -224,12 +202,6 @@ public class SharedPrefManager {
         String updated = name + "|" + price + "|" + minutes + "|" + image + "|" + link;
         list.set(index, updated);
         saveProductList(ctx, list);
-    }
-
-    public static void recalcProductTimes(Context ctx) {
-        double salary = getSalary(ctx).isEmpty() ? 0 : Double.parseDouble(getSalary(ctx));
-        boolean isAnnual = getSalaryType(ctx);
-        recalcProductTimes(ctx, salary, isAnnual);
     }
 
     public static void recalcProductTimes(Context ctx, double salary, boolean isAnnual) {
@@ -352,65 +324,6 @@ public class SharedPrefManager {
         int pos = getLanguage(ctx);
         String[] codes = {"es", "en", "fr", "de"};
         return (pos >= 0 && pos < codes.length) ? codes[pos] : "es";
-    }
-
-    public static void saveMonthStats(Context ctx, String monthKey, double savedMoney, long savedTime, double monthlySavings, List<String> products) {
-        SharedPreferences prefs = getPrefs(ctx);
-        String json = prefs.getString("monthly_history", "{}");
-
-        Gson gson = new Gson();
-        Type type = new TypeToken<Map<String, Object>>() {}.getType();
-        Map<String, Object> history = gson.fromJson(json, type);
-        if (history == null) history = new HashMap<>();
-
-        Map<String, Object> monthData = new HashMap<>();
-        monthData.put("savedMoney", savedMoney);
-        monthData.put("savedTime", savedTime);
-        monthData.put("monthlySavings", monthlySavings);
-        monthData.put("products", products);
-
-        history.put(monthKey, monthData);
-
-        prefs.edit().putString("monthly_history", gson.toJson(history)).apply();
-    }
-
-    public static Map<String, Object> getMonthStats(Context ctx, String monthKey) {
-        SharedPreferences prefs = getPrefs(ctx);
-        String json = prefs.getString("monthly_history", "{}");
-
-        Gson gson = new Gson();
-        Type type = new TypeToken<Map<String, Map<String, Object>>>() {}.getType();
-        Map<String, Map<String, Object>> history = gson.fromJson(json, type);
-
-        if (history != null && history.containsKey(monthKey)) {
-            return history.get(monthKey);
-        }
-        return null;
-    }
-
-    public static Map<String, Map<String, Object>> getHistory(Context ctx, boolean isPremium) {
-        SharedPreferences prefs = getPrefs(ctx);
-        String json = prefs.getString("monthly_history", "{}");
-
-        Gson gson = new Gson();
-        Type type = new TypeToken<Map<String, Map<String, Object>>>() {}.getType();
-        Map<String, Map<String, Object>> history = gson.fromJson(json, type);
-        if (history == null) history = new HashMap<>();
-
-        if (!isPremium) {
-            // limitar solo a mes actual + anterior
-            Calendar today = Calendar.getInstance();
-            String currentMonth = String.format("%04d-%02d", today.get(Calendar.YEAR), today.get(Calendar.MONTH)+1);
-            today.add(Calendar.MONTH, -1);
-            String previousMonth = String.format("%04d-%02d", today.get(Calendar.YEAR), today.get(Calendar.MONTH)+1);
-
-            Map<String, Map<String, Object>> limited = new HashMap<>();
-            if (history.containsKey(currentMonth)) limited.put(currentMonth, history.get(currentMonth));
-            if (history.containsKey(previousMonth)) limited.put(previousMonth, history.get(previousMonth));
-            return limited;
-        }
-
-        return history;
     }
 
     public static boolean isPremium(Context ctx) {

@@ -124,4 +124,14 @@ Close the result without saving or changing anything.
     <string name="info_premium_history">Complete spending history</string>
     <string name="info_premium_products">Unlimited products</string>
     <string name="info_premium_ads">No ads</string>
+
+    <string name="new_month">New month started</string>
+    <string name="summary_of">Summary of</string>
+    <string name="saved_money_card2">Money saved</string>
+    <string name="saved_time_card2">Time saved</string>
+    <string name="monthly_saves2">Monthly savings</string>
+    <string name="month_expenses2">Total expenses</string>
+    <string name="remaining_limit">Remaining limit</string>
+    <string name="continue_card">Continue</string>
+
 </resources>

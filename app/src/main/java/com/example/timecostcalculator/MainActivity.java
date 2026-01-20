@@ -3,22 +3,10 @@ package com.example.timecostcalculator;
 import androidx.fragment.app.Fragment;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Switch;
-import android.widget.TextView;
 
 import com.google.android.gms.ads.MobileAds;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import utils.SharedPrefManager;
 
@@ -37,13 +25,16 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
 
         //getSharedPreferences("prefs", Context.MODE_PRIVATE).edit().clear().apply();
-
+/*
         SharedPreferences prefs = getSharedPreferences("TimeCostPrefs", MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
+        //SharedPreferences.Editor editor = prefs.edit();
+
 
         // Limpiar todo el histórico mensual
         editor.remove("monthly_history"); // o editor.putString("monthly_history", "{}");
         editor.remove("history");
+        editor.remove("monthly_hours");
+        editor.remove("monthly_savings");
 
         // Obtenemos el JSON actual del histórico
         String json = prefs.getString("monthly_history", "{}");
@@ -54,6 +45,8 @@ public class MainActivity extends BaseActivity {
         if (history == null) {
             history = new HashMap<>();
         }
+
+
 
         Map<String, Object> otherData3 = new HashMap<>();
         otherData3.put("savedMoney", 120.0);
@@ -150,6 +143,11 @@ public class MainActivity extends BaseActivity {
         editor.putString("history", gson.toJson(history));
         editor.apply();
 
+
+        prefs.edit()
+                .putString("last_month", "2025-12") // mes anterior
+                .apply();
+        */
         // Ahora llama al chequeo
         MonthlyManager.checkAndRotateMonth(this);
 

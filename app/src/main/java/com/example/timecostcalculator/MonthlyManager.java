@@ -3,8 +3,18 @@ package com.example.timecostcalculator;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Handler;
 import android.os.Looper;
+import android.view.Gravity;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import androidx.cardview.widget.CardView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -21,6 +31,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import utils.MonthStats;
@@ -78,6 +89,7 @@ public class MonthlyManager {
             setLastMonthKey(ctx, currentMonth);
 
             // Mostrar popup solo si no se ha mostrado este mes
+            popupShown = false;
             if (!popupShown) {
                 showMonthChangePopup(ctx, lastMonth, prevMoney, prevTime, prevMonthlySavings,
                         prevCurrentSpending, prevMaxSpending);
@@ -145,37 +157,144 @@ public class MonthlyManager {
     /**
      * Muestra un popup con estadísticas del mes anterior.
      */
-    private static void showMonthChangePopup(Context ctx,
-                                             String month,
-                                             double money,
-                                             long timeMinutes,
-                                             double monthlySavings,
-                                             double prevCurrentSpending,
-                                             double prevMaxSpending) {
+    private static void showMonthChangePopup(
+            Context ctx,
+            String month,
+            double money,
+            long timeMinutes,
+            double monthlySavings,
+            double prevCurrentSpending,
+            double prevMaxSpending
+    ) {
         if (month.isEmpty()) return;
 
         long hours = timeMinutes / 60;
         long minutes = timeMinutes % 60;
 
-        Calendar cal = Calendar.getInstance();
-        String monthName = new SimpleDateFormat("MMMM yyyy").format(cal.getTime());
+        // === CARD ROOT ===
+        CardView card = new CardView(ctx);
+        card.setRadius(28f);
+        card.setCardElevation(16f);
+        card.setUseCompatPadding(true);
 
-        String message = "Se ha iniciado un nuevo mes: " + monthName +
-                "\n\nResumen del mes anterior (" + month + "):" +
-                "\nDinero ahorrado: " + String.format("%.2f", money) +
-                "\nTiempo ahorrado: " + hours + "h " + minutes + "m" +
-                "\nAhorros mensuales: " + String.format("%.2f", monthlySavings) +
-                "\nLímite restante: " + (prevMaxSpending - prevCurrentSpending) +
-                "\nDinero total gastado: " + prevCurrentSpending;
+        LinearLayout root = new LinearLayout(ctx);
+        root.setOrientation(LinearLayout.VERTICAL);
+        root.setPadding(48, 40, 48, 32);
+        card.addView(root);
 
-        new Handler(Looper.getMainLooper()).post(() ->
-                new AlertDialog.Builder(ctx)
-                        .setTitle("Nuevo mes iniciado")
-                        .setMessage(message)
-                        .setPositiveButton("OK", null)
-                        .show()
+        // === TITLE ===
+        TextView tvTitle = new TextView(ctx);
+        tvTitle.setText(R.string.new_month);
+        tvTitle.setTextSize(20);
+        tvTitle.setTypeface(Typeface.DEFAULT_BOLD);
+        tvTitle.setGravity(Gravity.CENTER);
+
+        TextView tvMonth = new TextView(ctx);
+        tvMonth.setText(
+                ctx.getString(R.string.summary_of) + " " + month
         );
+        tvMonth.setTextSize(14);
+        tvMonth.setTextColor(Color.GRAY);
+        tvMonth.setGravity(Gravity.CENTER);
+
+        root.addView(tvTitle);
+        root.addView(tvMonth);
+
+        // === DIVIDER ===
+        View divider = new View(ctx);
+        LinearLayout.LayoutParams divParams =
+                new LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT, 2);
+        divParams.setMargins(0, 32, 0, 24);
+        divider.setLayoutParams(divParams);
+        divider.setBackgroundColor(0x22000000);
+        root.addView(divider);
+
+        // === STATS ===
+        addStatRow(ctx, root, "\uD83D\uDCB0 " + ctx.getString(R.string.saved_money_card2),
+                String.format(Locale.getDefault(), "%.2f €", money));
+
+        addStatRow(ctx, root, "⌛ " + ctx.getString(R.string.saved_time_card2),
+                hours + "h " + minutes + "m");
+
+        addStatRow(ctx, root, "\uD83E\uDE99 " + ctx.getString(R.string.monthly_saves2),
+                String.format(Locale.getDefault(), "%.2f €", monthlySavings));
+
+        addStatRow(ctx, root, "\uD83D\uDCB8 " + ctx.getString(R.string.month_expenses2),
+                String.format(Locale.getDefault(), "%.2f €", prevCurrentSpending));
+
+        addStatRow(ctx, root, "\uD83C\uDFAF " + ctx.getString(R.string.remaining_limit),
+                String.format(Locale.getDefault(), "%.2f €",
+                        prevMaxSpending - prevCurrentSpending));
+
+        // === DIALOG ===
+        AlertDialog dialog = new AlertDialog.Builder(ctx)
+                .setView(card)
+                .setCancelable(false)
+                .create();
+
+        dialog.show();
+
+        // === CUSTOM BUTTON ===
+        addCustomButton(ctx, root, dialog);
     }
+
+    private static void addCustomButton(
+            Context ctx,
+            LinearLayout root,
+            AlertDialog dialog
+    ) {
+        TextView btn = new TextView(ctx);
+        btn.setText(R.string.continue_card);
+        btn.setTextSize(16);
+        btn.setTypeface(Typeface.DEFAULT_BOLD);
+        btn.setTextColor(Color.WHITE);
+        btn.setGravity(Gravity.CENTER);
+        btn.setPadding(0, 28, 0, 28);
+
+        LinearLayout.LayoutParams params =
+                new LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.setMargins(0, 32, 0, 0);
+
+        btn.setLayoutParams(params);
+        btn.setBackgroundResource(R.drawable.bg_primary_button);
+
+        btn.setOnClickListener(v -> dialog.dismiss());
+
+        root.addView(btn);
+    }
+
+
+
+    private static void addStatRow(
+            Context ctx,
+            LinearLayout parent,
+            String label,
+            String value
+    ) {
+        LinearLayout row = new LinearLayout(ctx);
+        row.setOrientation(LinearLayout.HORIZONTAL);
+        row.setPadding(0, 16, 0, 16);
+
+        TextView tvLabel = new TextView(ctx);
+        tvLabel.setText(label);
+        tvLabel.setPadding(24, 0, 0, 0);
+        tvLabel.setLayoutParams(
+                new LinearLayout.LayoutParams(0,
+                        ViewGroup.LayoutParams.WRAP_CONTENT, 1));
+
+        TextView tvValue = new TextView(ctx);
+        tvValue.setText(value);
+        tvValue.setTypeface(Typeface.DEFAULT_BOLD);
+
+        row.addView(tvLabel);
+        row.addView(tvValue);
+
+        parent.addView(row);
+    }
+
 
     public static List<MonthStats> getHistory(Context ctx, int historyStartIndex, int maxHistoryMonths) {
         SharedPreferences prefs = ctx.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
