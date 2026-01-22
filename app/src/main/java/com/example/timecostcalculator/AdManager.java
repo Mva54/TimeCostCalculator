@@ -1,6 +1,5 @@
 package com.example.timecostcalculator;
 
-import android.app.Activity;
 import android.content.Context;
 
 import androidx.annotation.NonNull;
@@ -29,7 +28,7 @@ public class AdManager {
 
         RewardedAd.load(
                 context,
-                "ca-app-pub-3940256099942544/5224354917",
+                "ca-app-pub-6751486812061921/2205067213",
                 request,
                 new RewardedAdLoadCallback() {
                     @Override
@@ -43,21 +42,6 @@ public class AdManager {
                     }
                 }
         );
-    }
-
-    public static boolean isRewardedReady() {
-        return rewardedAd != null;
-    }
-
-    public static void showRewarded(Activity activity, Runnable onReward) {
-        if (rewardedAd == null) return;
-
-        rewardedAd.show(activity, rewardItem -> {
-            onReward.run();
-        });
-
-        rewardedAd = null;
-        loadRewarded(activity);
     }
 }
 
