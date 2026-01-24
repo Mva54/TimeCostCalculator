@@ -24,7 +24,7 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //getSharedPreferences("prefs", Context.MODE_PRIVATE).edit().clear().apply();
+        getSharedPreferences("prefs", Context.MODE_PRIVATE).edit().clear().apply();
 /*
         SharedPreferences prefs = getSharedPreferences("TimeCostPrefs", MODE_PRIVATE);
         //SharedPreferences.Editor editor = prefs.edit();

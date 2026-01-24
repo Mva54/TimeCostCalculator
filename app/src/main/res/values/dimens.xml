@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="piechart_height">200dp</dimen>
+    <dimen name="card_text_height">20sp</dimen>
+    <dimen name="card_title_height">10sp</dimen>
+</resources>
+

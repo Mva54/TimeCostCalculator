@@ -20,6 +20,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SwitchCompat;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.ads.AdRequest;
@@ -62,6 +65,19 @@ public class ProfileFragment extends Fragment {
         tvLimitInfo = view.findViewById(R.id.tvLimitInfo);
         Button btnSubmitPremium = view.findViewById(R.id.btnSubmitPremium);
         LinearLayout premiumLayout = view.findViewById(R.id.cardPremiumPromo);
+
+        View root = view.findViewById(R.id.rootLayout); // tu LinearLayout
+
+        ViewCompat.setOnApplyWindowInsetsListener(root, (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(
+                    24 + systemBars.left,
+                    24 + systemBars.top,
+                    24 + systemBars.right,
+                    24 + systemBars.bottom
+            );
+            return insets;
+        });
 
         AdView adView = view.findViewById(R.id.adView);
 

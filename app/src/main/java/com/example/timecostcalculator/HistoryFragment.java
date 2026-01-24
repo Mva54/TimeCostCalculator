@@ -12,6 +12,9 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 
 import com.github.mikephil.charting.charts.BarChart;
@@ -55,6 +58,19 @@ public class HistoryFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.history_fragment, container, false);
+
+        View root = view.findViewById(R.id.rootLayout); // tu LinearLayout
+
+        ViewCompat.setOnApplyWindowInsetsListener(root, (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(
+                    16 + systemBars.left,
+                    16 + systemBars.top,
+                    16 + systemBars.right,
+                    16 + systemBars.bottom
+            );
+            return insets;
+        });
 
         historyContainer = view.findViewById(R.id.historyCardsContainer);
         View premiumCard = view.findViewById(R.id.cardPremiumPromo);

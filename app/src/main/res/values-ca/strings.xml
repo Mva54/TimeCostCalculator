@@ -26,7 +26,7 @@
         o %3$d dies i %4$d hores
     </string>
 
-    <string name="savings_goal">🎯 Límit màxim de despesa</string>
+    <string name="savings_goal">🎯 Màxim de despesa</string>
     <string name="savings_goal_holder">Introdueix el teu límit de despesa</string>
     <string name="remaining_money">💸 Diners restants per gastar</string>
 

@@ -26,6 +26,9 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.ads.AdRequest;
@@ -65,6 +68,19 @@ public class HomeFragment extends Fragment {
 
         // Inflar el layout
         View view = inflater.inflate(R.layout.home_fragment, container, false);
+
+        View root = view.findViewById(R.id.rootLayout); // tu LinearLayout
+
+        ViewCompat.setOnApplyWindowInsetsListener(root, (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(
+                    24 + systemBars.left,
+                    24 + systemBars.top,
+                    24 + systemBars.right,
+                    24 + systemBars.bottom
+            );
+            return insets;
+        });
 
         // Referencias a los TextViews
         tvSavedMoney = view.findViewById(R.id.tvSavedMoney);

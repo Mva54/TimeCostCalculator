@@ -25,7 +25,7 @@
         o %3$d días y %4$d horas
     </string>
 
-    <string name="savings_goal">🎯 Límite de gasto máximo</string>
+    <string name="savings_goal">🎯 Gasto máximo</string>
     <string name="savings_goal_holder">Introduce tu límite de gasto</string>
     <string name="remaining_money">💸 Dinero restante para gastar</string>
 
